@@ -26,7 +26,8 @@
       <h2>What is this tool?</h2>
       <p>This tool is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object
         Notation). It allows you to convert data between CBOR and JSON formats.</p>
-      <p>Just paste your CBOR value as hex or base64, or JSON as string above to begin.</p>
+      <p>To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field
+        above.</p>
     </section>
     <section>
       <h2>What is CBOR?</h2>
@@ -35,6 +36,15 @@
         size and performance are important.</p>
       <p>For more information, you can visit the <a href="https://cbor.io/" target="_blank"
           ref="noopener noreferrer">CBOR website</a>.</p>
+    </section>
+    <section>
+      <h2>Source, Issues and Development</h2>
+      <p>Explore the <a href="https://github.com/williamchong/cbor-json-web">GitHub repository</a> to view the source
+        code, contribute to pull requests and issues.</p>
+    </section>
+    <section>
+      <h2>About me</h2>
+      <p>Visit <a href="https://blog.williamchong.cloud">my blog</a> for more developer tips and stories.</p>
     </section>
   </div>
 </template>
@@ -55,10 +65,18 @@ const jsonPlaceHolder = JSON.stringify({
 })
 const cborPlaceHolder = computed(() => Buffer.from(jsonPlaceHolder).toString(cborEncoding.value))
 
+useHead({
+  title: 'CBOR to JSON Online Converter',
+  meta: [
+    { name: 'og:title', content: 'CBOR to JSON Online Converter' },
+    { name: 'description', content: 'Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with our online converter. Effortlessly transform CBOR-encoded data to JSON strings or vice versa, enabling seamless debugging and data interchange' }
+  ],
+})
 
 onMounted(() => {
   jsonToCbor()
 })
+
 function stringToBuffer(input: string) {
   if (cborEncoding.value === 'base64') {
     return Buffer.from(input, 'base64')
