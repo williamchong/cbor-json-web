@@ -4052,6 +4052,16 @@ nuxi@^3.12.0:
   optionalDependencies:
     fsevents "~2.3.3"
 
+nuxt-gtag@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/nuxt-gtag/-/nuxt-gtag-2.0.6.tgz#7ee9c7e8b2e03a58481f36c3616f27243d90bfb5"
+  integrity sha512-KjHujiwX4mtmgtHLMQB25NP3vxAuzsEqmZDkUoq9ZUSRLXly6FaPT97BTM4slr72eSfaoPGDeFyFxVvJhN4LVg==
+  dependencies:
+    "@nuxt/kit" "^3.11.2"
+    defu "^6.1.4"
+    pathe "^1.1.2"
+    ufo "^1.5.3"
+
 nuxt@^3.12.2:
   version "3.12.2"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-3.12.2.tgz#c2057bead1e342e4d19120d68b11843a17ad5e7c"

@@ -12,6 +12,7 @@
   "dependencies": {
     "cbor-x": "^1.5.9",
     "nuxt": "^3.12.2",
+    "nuxt-gtag": "^2.0.6",
     "vue": "latest"
   }
 }
