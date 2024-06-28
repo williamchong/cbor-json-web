@@ -22,6 +22,20 @@
         <textarea id="json-value" @input="jsonToCbor" v-model="jsonValue" :placeholder="jsonPlaceHolder" />
       </div>
     </section>
+    <section>
+      <h2>What is this tool?</h2>
+      <p>This tool is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object
+        Notation). It allows you to convert data between CBOR and JSON formats.</p>
+      <p>Just paste your CBOR value as hex or base64, or JSON as string above to begin.</p>
+    </section>
+    <section>
+      <h2>What is CBOR?</h2>
+      <p>CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient
+        than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where
+        size and performance are important.</p>
+      <p>For more information, you can visit the <a href="https://cbor.io/" target="_blank"
+          ref="noopener noreferrer">CBOR website</a>.</p>
+    </section>
   </div>
 </template>
 
