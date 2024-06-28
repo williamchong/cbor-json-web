@@ -14,12 +14,12 @@
             </select>
           </div>
         </div>
-        <textarea id="cbor-value" @input="cborToJson" v-model="cborValue" />
+        <textarea id="cbor-value" @input="cborToJson" v-model="cborValue" :placeholder="cborPlaceHolder" />
       </div>
       <div style="flex: 1">
         <label for="json-value">JSON</label>
         <br />
-        <textarea id="json-value" @input="jsonToCbor" v-model="jsonValue" />
+        <textarea id="json-value" @input="jsonToCbor" v-model="jsonValue" :placeholder="jsonPlaceHolder" />
       </div>
     </section>
   </div>
@@ -30,14 +30,17 @@ import { decode, encode } from 'cbor-x';
 import { Buffer } from 'node:buffer'
 
 const cborValue = ref('')
-const jsonValue = ref(JSON.stringify({
+const jsonValue = ref('')
+const cborEncoding = ref('base64' as BufferEncoding)
+const jsonPlaceHolder = JSON.stringify({
   hello: 'world',
   array: [1, 2, 3],
   nested: {
     key: 'value'
   }
-}))
-const cborEncoding = ref('base64' as BufferEncoding)
+})
+const cborPlaceHolder = computed(() => Buffer.from(jsonPlaceHolder).toString(cborEncoding.value))
+
 
 onMounted(() => {
   jsonToCbor()
@@ -61,6 +64,10 @@ function cborToJson() {
 
 function jsonToCbor() {
   try {
+    if (!jsonValue.value) {
+      cborValue.value = ''
+      return
+    }
     const cbor = encode(JSON.parse(jsonValue.value))
     cborValue.value = Buffer.from(cbor).toString(cborEncoding.value)
   } catch (e) {
