@@ -25,7 +25,7 @@
     <section>
       <h2>What is this tool?</h2>
       <p>This website is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object
-        Notation). It allows you to convert data between CBOR and JSON formats.</p>
+        Notation). It allows you to encode and decode data in CBOR and JSON formats.</p>
       <p>To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field
         above.</p>
     </section>
@@ -69,7 +69,7 @@ useHead({
   title: 'CBOR to JSON Online Converter',
   meta: [
     { name: 'og:title', content: 'CBOR to JSON Online Converter' },
-    { name: 'description', content: 'Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web converter.' }
+    { name: 'description', content: 'Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder.' }
   ],
 })
 
