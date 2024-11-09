@@ -65,14 +65,6 @@ const jsonPlaceHolder = JSON.stringify({
 })
 const cborPlaceHolder = computed(() => Buffer.from(jsonPlaceHolder).toString(cborEncoding.value))
 
-useHead({
-  title: 'CBOR to JSON Online Converter',
-  meta: [
-    { name: 'og:title', content: 'CBOR to JSON Online Converter' },
-    { name: 'description', content: 'Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder.' }
-  ],
-})
-
 function isBase64(input: string) {
   const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
   return base64Pattern.test(input);
