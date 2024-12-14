@@ -65,6 +65,20 @@ const jsonPlaceHolder = JSON.stringify({
 })
 const cborPlaceHolder = computed(() => Buffer.from(jsonPlaceHolder).toString(cborEncoding.value))
 
+useHead({
+  link: [
+    { rel: 'preload', as: 'script', href: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384552213891537', crossorigin: 'anonymous' },
+  ],
+})
+
+onMounted(() => {
+  useHead({
+    script: [
+      { src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384552213891537', async: true, crossorigin: 'anonymous', body: true },
+    ],
+  })
+})
+
 function isBase64(input: string) {
   const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
   return base64Pattern.test(input);
