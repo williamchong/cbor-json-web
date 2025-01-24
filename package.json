@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/tailwindcss": "6.13.1",
     "cbor-x": "^1.5.9",
     "nuxt": "^3.12.2",
     "nuxt-gtag": "^2.0.6",

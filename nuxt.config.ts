@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["nuxt-gtag"],
+  modules: ["nuxt-gtag", '@nuxtjs/tailwindcss'],
   gtag: {
     id: "G-PG6KXFFZPF",
   },

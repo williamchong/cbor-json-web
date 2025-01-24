@@ -1,51 +1,78 @@
 <template>
-  <div>
-    <h1>CBOR to JSON Online Converter</h1>
-    <p>Convert CBOR from/to JSON string</p>
-    <section style="display: flex; flex-wrap: wrap;">
-      <div style="flex: 1">
-        <div style="display: flex; gap: 25%;">
-          <label for="cbor-value">CBOR</label>
-          <div>
-            <label for="cbor-encoding">Encoding</label>
-            <select @change="jsonToCbor" id="cbor-encoding" v-model="cborEncoding">
-              <option value="base64">base64</option>
-              <option value="hex">hex</option>
-            </select>
+  <div class="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">CBOR to JSON Online Converter</h1>
+      <p class="text-gray-600 mb-8">Convert CBOR from/to JSON string</p>
+      
+      <section class="flex flex-col md:flex-row gap-6 mb-12">
+        <div class="flex-1">
+          <div class="flex justify-between items-center mb-2">
+            <label for="cbor-value" class="text-sm font-medium text-gray-700">CBOR</label>
+            <div class="flex items-center gap-2">
+              <label for="cbor-encoding" class="text-sm font-medium text-gray-700">Encoding</label>
+              <select 
+                @change="jsonToCbor" 
+                id="cbor-encoding" 
+                v-model="cborEncoding"
+                class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="base64">base64</option>
+                <option value="hex">hex</option>
+              </select>
+            </div>
           </div>
+          <textarea 
+            id="cbor-value" 
+            @input="cborToJson" 
+            v-model="cborValue" 
+            :placeholder="cborPlaceHolder"
+            class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+          />
         </div>
-        <textarea id="cbor-value" @input="cborToJson" v-model="cborValue" :placeholder="cborPlaceHolder" />
+        <div class="flex-1">
+          <label for="json-value" class="block text-sm font-medium text-gray-700 mb-2">JSON</label>
+          <textarea 
+            id="json-value" 
+            @input="jsonToCbor" 
+            v-model="jsonValue" 
+            :placeholder="jsonPlaceHolder"
+            class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+          />
+        </div>
+      </section>
+
+      <div class="space-y-8">
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is this tool?</h2>
+          <div class="space-y-4 text-gray-600">
+            <p>This website is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation). It allows you to encode and decode data in CBOR and JSON formats.</p>
+            <p>To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field above.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is CBOR?</h2>
+          <div class="space-y-4 text-gray-600">
+            <p>CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where size and performance are important.</p>
+            <p>For more information, you can visit the <a href="https://cbor.io/" target="_blank" ref="noopener noreferrer" class="text-blue-600 hover:text-blue-800">CBOR website</a>.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">Source, Issues and Development</h2>
+          <p class="text-gray-600">
+            Explore the <a href="https://github.com/williamchong/cbor-json-web" class="text-blue-600 hover:text-blue-800">GitHub repository</a> to view the source code, contribute to pull requests and issues.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">About me</h2>
+          <p class="text-gray-600">
+            Visit <a href="https://blog.williamchong.cloud" class="text-blue-600 hover:text-blue-800">my blog</a> for more developer tips and stories.
+          </p>
+        </section>
       </div>
-      <div style="flex: 1">
-        <label for="json-value">JSON</label>
-        <br />
-        <textarea id="json-value" @input="jsonToCbor" v-model="jsonValue" :placeholder="jsonPlaceHolder" />
-      </div>
-    </section>
-    <section>
-      <h2>What is this tool?</h2>
-      <p>This website is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object
-        Notation). It allows you to encode and decode data in CBOR and JSON formats.</p>
-      <p>To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field
-        above.</p>
-    </section>
-    <section>
-      <h2>What is CBOR?</h2>
-      <p>CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient
-        than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where
-        size and performance are important.</p>
-      <p>For more information, you can visit the <a href="https://cbor.io/" target="_blank"
-          ref="noopener noreferrer">CBOR website</a>.</p>
-    </section>
-    <section>
-      <h2>Source, Issues and Development</h2>
-      <p>Explore the <a href="https://github.com/williamchong/cbor-json-web">GitHub repository</a> to view the source
-        code, contribute to pull requests and issues.</p>
-    </section>
-    <section>
-      <h2>About me</h2>
-      <p>Visit <a href="https://blog.williamchong.cloud">my blog</a> for more developer tips and stories.</p>
-    </section>
+    </div>
   </div>
 </template>
 
