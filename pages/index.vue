@@ -3,16 +3,16 @@
     <div class="max-w-6xl mx-auto">
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">CBOR to JSON Online Converter</h1>
       <p class="text-gray-600 mb-8">Convert CBOR from/to JSON string</p>
-      
+
       <section class="flex flex-col md:flex-row gap-6 mb-12">
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2">
             <label for="cbor-value" class="text-sm font-medium text-gray-700">CBOR</label>
             <div class="flex items-center gap-2">
               <label for="cbor-encoding" class="text-sm font-medium text-gray-700">Encoding</label>
-              <select 
-                @change="jsonToCbor" 
-                id="cbor-encoding" 
+              <select
+                @change="jsonToCbor"
+                id="cbor-encoding"
                 v-model="cborEncoding"
                 class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
               >
@@ -21,20 +21,20 @@
               </select>
             </div>
           </div>
-          <textarea 
-            id="cbor-value" 
-            @input="cborToJson" 
-            v-model="cborValue" 
+          <textarea
+            id="cbor-value"
+            @input="cborToJson"
+            v-model="cborValue"
             :placeholder="cborPlaceHolder"
             class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
           />
         </div>
         <div class="flex-1">
           <label for="json-value" class="block text-sm font-medium text-gray-700 mb-2">JSON</label>
-          <textarea 
-            id="json-value" 
-            @input="jsonToCbor" 
-            v-model="jsonValue" 
+          <textarea
+            id="json-value"
+            @input="jsonToCbor"
+            v-model="jsonValue"
             :placeholder="jsonPlaceHolder"
             class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
           />
@@ -101,7 +101,7 @@ useHead({
 onMounted(() => {
   useHead({
     script: [
-      { src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384552213891537', async: true, crossorigin: 'anonymous', body: true },
+      { src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384552213891537', async: true, crossorigin: 'anonymous' },
     ],
   })
 })
@@ -145,7 +145,7 @@ function jsonToCbor() {
       return
     }
     const cbor = encode(JSON.parse(jsonValue.value))
-    cborValue.value = Buffer.from(cbor).toString(cborEncoding.value)
+    cborValue.value = cbor.toString(cborEncoding.value)
   } catch (e) {
     cborValue.value = (e as Error).message
   }
