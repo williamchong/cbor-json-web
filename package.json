@@ -10,11 +10,16 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/eslint": "1.0.1",
     "@nuxtjs/tailwindcss": "6.13.1",
     "cbor-x": "^1.5.9",
+    "eslint": "^9.0.0",
     "nuxt": "^3.15.4",
     "nuxt-gtag": "^2.0.6",
     "vue": "latest"
   },
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
 }

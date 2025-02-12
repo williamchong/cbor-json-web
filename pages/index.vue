@@ -11,10 +11,10 @@
             <div class="flex items-center gap-2">
               <label for="cbor-encoding" class="text-sm font-medium text-gray-700">Encoding</label>
               <select
-                @change="jsonToCbor"
                 id="cbor-encoding"
                 v-model="cborEncoding"
                 class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+                @change="jsonToCbor"
               >
                 <option value="base64">base64</option>
                 <option value="hex">hex</option>
@@ -23,20 +23,20 @@
           </div>
           <textarea
             id="cbor-value"
-            @input="cborToJson"
             v-model="cborValue"
             :placeholder="cborPlaceHolder"
             class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+            @input="cborToJson"
           />
         </div>
         <div class="flex-1">
           <label for="json-value" class="block text-sm font-medium text-gray-700 mb-2">JSON</label>
           <textarea
             id="json-value"
-            @input="jsonToCbor"
             v-model="jsonValue"
             :placeholder="jsonPlaceHolder"
             class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+            @input="jsonToCbor"
           />
         </div>
       </section>
@@ -54,7 +54,7 @@
           <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is CBOR?</h2>
           <div class="space-y-4 text-gray-600">
             <p>CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where size and performance are important.</p>
-            <p>For more information, you can visit the <a href="https://cbor.io/" target="_blank" ref="noopener noreferrer" class="text-blue-600 hover:text-blue-800">CBOR website</a>.</p>
+            <p>For more information, you can visit the <a ref="noopener noreferrer" href="https://cbor.io/" target="_blank" class="text-blue-600 hover:text-blue-800">CBOR website</a>.</p>
           </div>
         </section>
 

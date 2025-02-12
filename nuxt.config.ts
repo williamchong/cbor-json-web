@@ -7,12 +7,18 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["nuxt-gtag", '@nuxtjs/tailwindcss'],
+
+  modules: ['nuxt-gtag', '@nuxtjs/tailwindcss', '@nuxt/eslint'],
+
   gtag: {
-    id: "G-PG6KXFFZPF",
+    id: 'G-PG6KXFFZPF',
   },
+
   devtools: { enabled: true },
+
   experimental: {
     clientNodeCompat: true,
   },
+
+  compatibilityDate: '2025-02-13',
 });
