@@ -96,7 +96,7 @@ const jsonPlaceHolder = JSON.stringify({
     key: 'value'
   }
 })
-const cborPlaceHolder = computed(() => Buffer.from(jsonPlaceHolder).toString(cborEncoding.value))
+const cborPlaceHolder = computed(() => Buffer.from(encode(JSON.parse(jsonPlaceHolder))).toString(cborEncoding.value))
 
 useHead({
   link: [
