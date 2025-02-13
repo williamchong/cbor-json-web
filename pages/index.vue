@@ -151,7 +151,7 @@ function jsonToCbor() {
       return
     }
     const cbor = encode(JSON.parse(jsonValue.value))
-    cborValue.value = cbor.toString(cborEncoding.value)
+    cborValue.value = Buffer.from(cbor).toString(cborEncoding.value)
   } catch (e) {
     cborValue.value = (e as Error).message
   }
