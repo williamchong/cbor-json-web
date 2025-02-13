@@ -83,8 +83,9 @@
 </template>
 
 <script setup lang="ts">
-import { decode, encode } from 'cbor-x';
+import { encode } from 'cbor-x'
 import { Buffer } from 'node:buffer'
+import { isBase64, isHex, cborToJsonString, jsonStringToCbor } from '~/utils/cbor'
 
 const cborValue = ref('')
 const jsonValue = ref('')
@@ -112,24 +113,6 @@ onMounted(() => {
   })
 })
 
-function isBase64(input: string) {
-  const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
-  return base64Pattern.test(input);
-}
-
-function isHex(input: string) {
-  const hexPattern = /^[0-9A-Fa-f]+$/;
-  return hexPattern.test(input);
-}
-
-function stringToBuffer(input: string) {
-  if (cborEncoding.value === 'base64') {
-    return Buffer.from(input, 'base64')
-  } else {
-    return Buffer.from(input, 'hex')
-  }
-}
-
 function cborToJson() {
   try {
     if (isBase64(cborValue.value) && !isHex(cborValue.value)) {
@@ -137,8 +120,7 @@ function cborToJson() {
     } else if (!isBase64(cborValue.value) && isHex(cborValue.value)) {
       cborEncoding.value = 'hex'
     }
-    const cbor = decode(stringToBuffer(cborValue.value))
-    jsonValue.value = JSON.stringify(cbor, null, 2)
+    jsonValue.value = cborToJsonString(cborValue.value, cborEncoding.value)
   } catch (e) {
     jsonValue.value = (e as Error).message
   }
@@ -146,28 +128,7 @@ function cborToJson() {
 
 function jsonToCbor() {
   try {
-    if (!jsonValue.value) {
-      cborValue.value = ''
-      return
-    }
-    const cbor = encode(JSON.parse(
-      jsonValue.value,
-      (_, value) => {
-        if (value === null || value === undefined) return value;
-        if (
-          (value?.type === 'Buffer' && Array.isArray(value.data)) ||
-          (value?.buffer instanceof ArrayBuffer && typeof value.byteLength === 'number')
-        ) {
-          try {
-            return Buffer.from(value.data || value);
-          } catch {
-            return value;
-          }
-        }
-        return value;
-      }
-    ))
-    cborValue.value = Buffer.from(cbor).toString(cborEncoding.value)
+    cborValue.value = jsonStringToCbor(jsonValue.value, cborEncoding.value)
   } catch (e) {
     cborValue.value = (e as Error).message
   }

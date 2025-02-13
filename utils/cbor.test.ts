@@ -1,0 +1,69 @@
+import { describe, it, expect } from 'vitest'
+import { isBase64, isHex, cborToJsonString, jsonStringToCbor } from './cbor'
+
+describe('CBOR Utils', () => {
+  describe('isBase64', () => {
+    it('should return true for valid base64 strings', () => {
+      expect(isBase64('aGVsbG8=')).toBe(true)
+    })
+
+    it('should return false for invalid base64 strings', () => {
+      expect(isBase64('not-base64!')).toBe(false)
+    })
+  })
+
+  describe('isHex', () => {
+    it('should return true for valid hex strings', () => {
+      expect(isHex('1a2b3c')).toBe(true)
+    })
+
+    it('should return false for invalid hex strings', () => {
+      expect(isHex('not-hex!')).toBe(false)
+    })
+  })
+
+  describe('cborToJsonString', () => {
+    it('should convert base64 CBOR to JSON string', () => {
+      const base64CBOR = 'ZWhlbGxv'
+      expect(cborToJsonString(base64CBOR, 'base64')).toBe('"hello"')
+    })
+
+    it('should convert hex CBOR to JSON string', () => {
+      const hexCBOR = '6568656c6c6f'
+      expect(cborToJsonString(hexCBOR, 'hex')).toBe('"hello"')
+    })
+
+    it('should return empty string for empty input', () => {
+      expect(cborToJsonString('', 'base64')).toBe('')
+    })
+  })
+
+  describe('jsonStringToCbor', () => {
+    it('should convert JSON string to base64 CBOR', () => {
+      const json = '"hello"'
+      const result = jsonStringToCbor(json, 'base64')
+      expect(cborToJsonString(result, 'base64')).toBe(json)
+    })
+
+    it('should convert JSON string to hex CBOR', () => {
+      const json = '"hello"'
+      const result = jsonStringToCbor(json, 'hex')
+      expect(cborToJsonString(result, 'hex')).toBe(json)
+    })
+
+    it('should handle complex objects', () => {
+      const json = JSON.stringify({
+        string: "hello",
+        number: 42,
+        array: [1,2,3],
+        nested: { key: "value" }
+      }, null, 2)
+      const result = jsonStringToCbor(json, 'base64')
+      expect(cborToJsonString(result, 'base64')).toBe(json)
+    })
+
+    it('should return empty string for empty input', () => {
+      expect(jsonStringToCbor('', 'base64')).toBe('')
+    })
+  })
+})
