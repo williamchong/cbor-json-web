@@ -21,23 +21,29 @@
               </select>
             </div>
           </div>
-          <textarea
-            id="cbor-value"
-            v-model="cborValue"
-            :placeholder="cborPlaceHolder"
-            class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
-            @input="cborToJson"
-          />
+          <div class="relative">
+            <textarea
+              id="cbor-value"
+              v-model="cborValue"
+              :placeholder="cborPlaceHolder"
+              class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+              @input="cborToJson"
+            />
+            <CopyButton :text="cborValue" />
+          </div>
         </div>
         <div class="flex-1">
           <label for="json-value" class="block text-sm font-medium text-gray-700 mb-2">JSON</label>
-          <textarea
-            id="json-value"
-            v-model="jsonValue"
-            :placeholder="jsonPlaceHolder"
-            class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
-            @input="jsonToCbor"
-          />
+          <div class="relative">
+            <textarea
+              id="json-value"
+              v-model="jsonValue"
+              :placeholder="jsonPlaceHolder"
+              class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+              @input="jsonToCbor"
+            />
+            <CopyButton :text="jsonValue" />
+          </div>
         </div>
       </section>
 
