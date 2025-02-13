@@ -150,7 +150,23 @@ function jsonToCbor() {
       cborValue.value = ''
       return
     }
-    const cbor = encode(JSON.parse(jsonValue.value))
+    const cbor = encode(JSON.parse(
+      jsonValue.value,
+      (_, value) => {
+        if (value === null || value === undefined) return value;
+        if (
+          (value?.type === 'Buffer' && Array.isArray(value.data)) ||
+          (value?.buffer instanceof ArrayBuffer && typeof value.byteLength === 'number')
+        ) {
+          try {
+            return Buffer.from(value.data || value);
+          } catch {
+            return value;
+          }
+        }
+        return value;
+      }
+    ))
     cborValue.value = Buffer.from(cbor).toString(cborEncoding.value)
   } catch (e) {
     cborValue.value = (e as Error).message
