@@ -47,10 +47,19 @@ describe('CBOR Utils', () => {
     it('should handle buffer with different output formats', () => {
       const bufferData = Buffer.from('hello')
       const cborHex = Buffer.from(encode({ data: bufferData })).toString('hex')
-      expect(cborToJsonString(cborHex, 'hex', 'base64')).toContain('aGVsbG8=')
-      expect(cborToJsonString(cborHex, 'hex', 'hex')).toContain('68656c6c6f')
-      expect(cborToJsonString(cborHex, 'hex', 'none')).toContain('Buffer')
+      expect(cborToJsonString(cborHex, 'hex', { bufferFormat: 'base64' })).toContain('aGVsbG8=')
+      expect(cborToJsonString(cborHex, 'hex', { bufferFormat: 'hex' })).toContain('68656c6c6f')
+      expect(cborToJsonString(cborHex, 'hex', { bufferFormat: 'none' })).toContain('Buffer')
     })
+
+    it('should convert Set to Array when specified', () => {
+      const set = new Set([1, 2, 3]);
+      const cborHex = Buffer.from(encode({ data: set })).toString('hex');
+      const jsonWithSet = cborToJsonString(cborHex, 'hex', { convertSetToArray: false });
+      const jsonWithArray = cborToJsonString(cborHex, 'hex', { convertSetToArray: true });
+      expect(jsonWithSet).toContain('{}');
+      expect(jsonWithArray).toBe(JSON.stringify({ data: Array.from(set) }, null, 2));
+    });
   })
 
   describe('jsonStringToCbor', () => {

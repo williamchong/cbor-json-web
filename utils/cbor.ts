@@ -51,6 +51,9 @@ export function cborToJsonString(
           return value;
       }
     }
+    if (convertSetToArray && value instanceof Set) {
+      return Array.from(value);
+    }
     return value;
   }, 2)
 }
