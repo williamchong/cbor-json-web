@@ -14,7 +14,6 @@
                 id="cbor-encoding"
                 v-model="cborEncoding"
                 class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
-                @change="jsonToCbor"
               >
                 <option value="base64">base64</option>
                 <option value="hex">hex</option>
@@ -33,7 +32,23 @@
           </div>
         </div>
         <div class="flex-1">
-          <label for="json-value" class="block text-sm font-medium text-gray-700 mb-2">JSON</label>
+          <div class="flex justify-between items-center mb-2">
+            <label for="json-value" class="text-sm font-medium text-gray-700">JSON</label>
+            <div class="flex items-center gap-2">
+              <label v-if="!isJsonInput" for="buffer-format" class="text-sm font-medium text-gray-700">Buffer-Like Encoding</label>
+              <select
+                v-if="!isJsonInput"
+                id="buffer-format"
+                v-model="bufferFormat"
+                class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+                @change="cborToJson"
+              >
+                <option value="none">none</option>
+                <option value="base64">base64</option>
+                <option value="hex">hex</option>
+              </select>
+            </div>
+          </div>
           <div class="relative">
             <textarea
               id="json-value"
@@ -60,7 +75,7 @@
           <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is CBOR?</h2>
           <div class="space-y-4 text-gray-600">
             <p>CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where size and performance are important.</p>
-            <p>For more information, you can visit the <a ref="noopener noreferrer" href="https://cbor.io/" target="_blank" class="text-blue-600 hover:text-blue-800">CBOR website</a>.</p>
+            <p>For more information, you can visit the <a ref="noneener noreferrer" href="https://cbor.io/" target="_blank" class="text-blue-600 hover:text-blue-800">CBOR website</a>.</p>
           </div>
         </section>
 
@@ -85,7 +100,7 @@
 <script setup lang="ts">
 import { encode } from 'cbor-x'
 import { Buffer } from 'node:buffer'
-import { isBase64, isHex, cborToJsonString, jsonStringToCbor } from '~/utils/cbor'
+import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputFormat } from '~/utils/cbor'
 
 const cborValue = ref('')
 const jsonValue = ref('')
@@ -98,6 +113,8 @@ const jsonPlaceHolder = JSON.stringify({
   }
 })
 const cborPlaceHolder = computed(() => Buffer.from(encode(JSON.parse(jsonPlaceHolder))).toString(cborEncoding.value))
+const bufferFormat = ref<BufferOutputFormat>('none')
+const isJsonInput = ref(false)
 
 useHead({
   link: [
@@ -113,20 +130,35 @@ onMounted(() => {
   })
 })
 
+watch(cborEncoding, () => {
+  if (isJsonInput.value) {
+    jsonToCbor()
+  } else {
+    cborToJson()
+  }
+})
+
+watch(bufferFormat, () => {
+  if (isJsonInput.value) return;
+  cborToJson()
+})
+
 function cborToJson() {
+  isJsonInput.value = false
   try {
     if (isBase64(cborValue.value) && !isHex(cborValue.value)) {
       cborEncoding.value = 'base64'
     } else if (!isBase64(cborValue.value) && isHex(cborValue.value)) {
       cborEncoding.value = 'hex'
     }
-    jsonValue.value = cborToJsonString(cborValue.value, cborEncoding.value)
+    jsonValue.value = cborToJsonString(cborValue.value, cborEncoding.value, bufferFormat.value)
   } catch (e) {
     jsonValue.value = (e as Error).message
   }
 }
 
 function jsonToCbor() {
+  isJsonInput.value = true
   try {
     cborValue.value = jsonStringToCbor(jsonValue.value, cborEncoding.value)
   } catch (e) {

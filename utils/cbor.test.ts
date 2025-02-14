@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { isBase64, isHex, cborToJsonString, jsonStringToCbor } from './cbor'
+import { encode } from 'cbor-x'
 
 describe('CBOR Utils', () => {
   describe('isBase64', () => {
@@ -41,6 +42,14 @@ describe('CBOR Utils', () => {
 
     it('should return empty string for empty input', () => {
       expect(cborToJsonString('', 'base64')).toBe('')
+    })
+
+    it('should handle buffer with different output formats', () => {
+      const bufferData = Buffer.from('hello')
+      const cborHex = Buffer.from(encode({ data: bufferData })).toString('hex')
+      expect(cborToJsonString(cborHex, 'hex', 'base64')).toContain('aGVsbG8=')
+      expect(cborToJsonString(cborHex, 'hex', 'hex')).toContain('68656c6c6f')
+      expect(cborToJsonString(cborHex, 'hex', 'none')).toContain('Buffer')
     })
   })
 

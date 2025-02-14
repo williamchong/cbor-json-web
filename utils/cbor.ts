@@ -19,10 +19,40 @@ export function stringToBuffer(input: string, encoding: BufferEncoding) {
   }
 }
 
-export function cborToJsonString(cborValue: string, encoding: BufferEncoding) {
+export type BufferOutputFormat = 'base64' | 'hex' | 'none';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isBufferObject(value: any): boolean {
+  return value instanceof Buffer || value?.type === 'Buffer' && Array.isArray(value?.data);
+}
+
+export function cborToJsonString(
+  cborValue: string,
+  encoding: BufferEncoding,
+  {
+    bufferFormat = 'none',
+    convertSetToArray = false,
+  }: {
+    bufferFormat?: BufferOutputFormat;
+    convertSetToArray?: boolean;
+  } = {}
+) {
   if (!cborValue) return '';
   const cbor = decode(stringToBuffer(cborValue, encoding))
-  return JSON.stringify(cbor, null, 2)
+  return JSON.stringify(cbor, (key, value) => {
+    if ( isBufferObject(value)|| ArrayBuffer.isView(value)) {
+      const actualBuffer = value?.buffer || value;
+      switch (bufferFormat) {
+        case 'base64':
+          return Buffer.from(actualBuffer).toString('base64');
+        case 'hex':
+          return Buffer.from(actualBuffer).toString('hex');
+        default:
+          return value;
+      }
+    }
+    return value;
+  }, 2)
 }
 
 export function jsonStringToCbor(jsonValue: string, encoding: BufferEncoding): string {
@@ -32,7 +62,7 @@ export function jsonStringToCbor(jsonValue: string, encoding: BufferEncoding): s
       jsonValue,
       (_, value) => {
         if (value === null || value === undefined) return value;
-        if (value?.type === 'Buffer' && Array.isArray(value.data)) {
+        if (isBufferObject(value)) {
           try {
             return Buffer.from(value.data);
           } catch {
