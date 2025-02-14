@@ -105,6 +105,34 @@
         </section>
 
         <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">Buffer Handling</h2>
+          <div class="space-y-4 text-gray-600">
+            <p>When converting from JSON to CBOR, if a stringified Buffer object is detected in the JSON (e.g. {"type":"Buffer","data":[1,2,3]}), it will be automatically converted back to a Buffer in the CBOR output.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">ArrayBuffer Display Options</h2>
+          <div class="space-y-4 text-gray-600">
+            <p>ArrayBufferLike values in CBOR cannot be directly stringified to JSON. To handle this, you can choose how to display buffer-like values when converting from CBOR to JSON using the "Buffer Format" dropdown:</p>
+            <ul class="list-disc list-inside pl-4">
+              <li>none: Keep as is</li>
+              <li>base64: Convert to base64 string</li>
+              <li>hex: Convert to hexadecimal string</li>
+            </ul>
+            <p>Note that these display options only affect CBOR to JSON conversion. When converting from JSON to CBOR, buffer-like values need to be properly formatted as Buffer objects.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">Set Support</h2>
+          <div class="space-y-4 text-gray-600">
+            <p>CBOR supports Set data structures, but these cannot be directly stringified to JSON. By default, Sets are automatically converted to Arrays when converting from CBOR to JSON.</p>
+            <p>You can toggle this behavior in the settings menu (gear icon) next to the Buffer Format selector. When disabled, Sets will be preserved as objects with their original type information.</p>
+          </div>
+        </section>
+
+        <section>
           <h2 class="text-2xl font-semibold text-gray-900 mb-4">Source, Issues and Development</h2>
           <p class="text-gray-600">
             Explore the <a href="https://github.com/williamchong/cbor-json-web" class="text-blue-600 hover:text-blue-800">GitHub repository</a> to view the source code, contribute to pull requests and issues.
