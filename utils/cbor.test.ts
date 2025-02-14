@@ -33,6 +33,12 @@ describe('CBOR Utils', () => {
       expect(cborToJsonString(hexCBOR, 'hex')).toBe('"hello"')
     })
 
+    it('should handle complex objects', () => {
+      const data = 'b9000466737472696e676568656c6c6f666e756d626572182a65617272617983010203666e6573746564b90001636b65796576616c7565'
+      const result = cborToJsonString(data, 'hex')
+      expect(jsonStringToCbor(result, 'hex')).toBe(data)
+    })
+
     it('should return empty string for empty input', () => {
       expect(cborToJsonString('', 'base64')).toBe('')
     })
@@ -60,6 +66,20 @@ describe('CBOR Utils', () => {
       }, null, 2)
       const result = jsonStringToCbor(json, 'base64')
       expect(cborToJsonString(result, 'base64')).toBe(json)
+    })
+
+    it('should handle Buffer', () => {
+      const json = JSON.stringify({
+        buffer: Buffer.from('hello')
+      }, null, 2)
+      const result = jsonStringToCbor(json, 'hex')
+      expect(cborToJsonString(result, 'hex')).toBe(json)
+    })
+
+    it('should handle null values', () => {
+      const json = 'null'
+      const result = jsonStringToCbor(json, 'hex')
+      expect(cborToJsonString(result, 'hex')).toBe(json)
     })
 
     it('should return empty string for empty input', () => {
