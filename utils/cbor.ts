@@ -32,12 +32,9 @@ export function jsonStringToCbor(jsonValue: string, encoding: BufferEncoding): s
       jsonValue,
       (_, value) => {
         if (value === null || value === undefined) return value;
-        if (
-          (value?.type === 'Buffer' && Array.isArray(value.data)) ||
-          (value?.buffer instanceof ArrayBuffer && typeof value.byteLength === 'number')
-        ) {
+        if (value?.type === 'Buffer' && Array.isArray(value.data)) {
           try {
-            return Buffer.from(value.data || value);
+            return Buffer.from(value.data);
           } catch {
             return value;
           }
