@@ -9,6 +9,18 @@
           <div class="flex justify-between items-center mb-2">
             <label for="cbor-value" class="text-sm font-medium text-gray-700">CBOR</label>
             <div class="flex items-center gap-2">
+              <button
+                class="px-3 py-1 text-sm rounded-lg border border-gray-300 hover:bg-gray-100"
+                @click="$refs.fileInput.click()"
+              >
+                Upload Binary
+              </button>
+              <input
+                ref="fileInput"
+                type="file"
+                class="hidden"
+                @change="handleFileUpload"
+              >
               <label for="cbor-encoding" class="text-sm font-medium text-gray-700">Encoding</label>
               <select
                 id="cbor-encoding"
@@ -170,6 +182,7 @@ const bufferFormat = ref<BufferOutputFormat>('none')
 const isJsonInput = ref(false)
 const convertSetToArray = ref(true)
 const isSettingsOpen = ref(false)
+const fileInput = ref<HTMLInputElement>()
 
 useHead({
   link: [
@@ -197,6 +210,24 @@ watch(bufferFormat, () => {
   if (isJsonInput.value) return;
   cborToJson()
 })
+
+async function handleFileUpload(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  try {
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    cborValue.value = buffer.toString(cborEncoding.value)
+    cborToJson()
+  } catch (e) {
+    jsonValue.value = (e as Error).message
+  }
+
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
+}
 
 function cborToJson() {
   isJsonInput.value = false
