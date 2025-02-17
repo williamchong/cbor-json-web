@@ -25,6 +25,7 @@ const copied = ref(false)
 
 async function copyText() {
   await navigator.clipboard.writeText(props.text)
+  useTrackEvent('copy')
   copied.value = true
   setTimeout(() => {
     copied.value = false

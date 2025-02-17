@@ -56,7 +56,7 @@
                   id="buffer-format"
                   v-model="bufferFormat"
                   class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
-                  @change="cborToJson"
+                  @change="onBufferFormatChange"
                 >
                   <option value="none">none</option>
                   <option value="base64">base64</option>
@@ -65,7 +65,7 @@
               </div>
               <button
                 class="p-1 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                @click="isSettingsOpen = !isSettingsOpen"
+                @click="onClickSettings"
               >
                 <Icon
                   name="material-symbols:settings"
@@ -82,7 +82,7 @@
                     v-model="convertSetToArray"
                     type="checkbox"
                     class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    @change="cborToJson"
+                    @change="onToggleSetSettings"
                   >
                   <span class="text-sm text-gray-600">Convert Set to Array</span>
                 </label>
@@ -214,7 +214,25 @@ watch(bufferFormat, () => {
   cborToJson()
 })
 
+function onBufferFormatChange() {
+  useTrackEvent('toggle_buffer_format', {
+    format: bufferFormat.value
+  })
+}
+
+function onClickSettings() {
+  useTrackEvent('toggle_settings')
+  isSettingsOpen.value = !isSettingsOpen.value
+}
+
+function onToggleSetSettings() {
+  useTrackEvent('toggle_settings_set_conversion', {
+  })
+  cborToJson()
+}
+
 async function handleFileUpload(event: Event) {
+  useTrackEvent('select_file')
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
 
@@ -244,6 +262,7 @@ function cborToJson() {
       bufferFormat: bufferFormat.value,
       convertSetToArray: convertSetToArray.value
     })
+    useTrackEvent('convert_cbor_to_json')
   } catch (e) {
     jsonValue.value = (e as Error).message
   }
@@ -253,6 +272,7 @@ function jsonToCbor() {
   isJsonInput.value = true
   try {
     cborValue.value = jsonStringToCbor(jsonValue.value, cborEncoding.value)
+    useTrackEvent('convert_json_to_cbor')
   } catch (e) {
     cborValue.value = (e as Error).message
   }
