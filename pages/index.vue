@@ -88,6 +88,7 @@
                 </label>
               </div>
             </div>
+            <div v-else class="p-4" />
           </div>
           <div class="relative">
             <textarea
