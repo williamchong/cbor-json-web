@@ -8,7 +8,12 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-gtag', '@nuxtjs/tailwindcss', '@nuxt/eslint'],
+  modules: [
+    'nuxt-gtag',
+    '@nuxtjs/tailwindcss',
+    '@nuxt/eslint',
+    '@nuxt/icon',
+  ],
 
   gtag: {
     id: 'G-PG6KXFFZPF',

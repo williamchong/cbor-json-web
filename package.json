@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@nuxt/eslint": "1.0.1",
+    "@nuxt/icon": "1.10.3",
     "@nuxtjs/tailwindcss": "6.13.1",
     "cbor-x": "^1.5.9",
     "eslint": "^9.0.0",
