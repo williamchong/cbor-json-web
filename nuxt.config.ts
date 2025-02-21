@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 
   modules: [
     'nuxt-gtag',
+    '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -17,6 +18,28 @@ export default defineNuxtConfig({
 
   gtag: {
     id: 'G-PG6KXFFZPF',
+  },
+  i18n: {
+    baseUrl: 'https://cbor.williamchong.cloud',
+    strategy: 'prefix_and_default',
+    detectBrowserLanguage: {
+      useCookie: false,
+      redirectOn: 'root'
+    },
+    locales: [
+      {
+        code: 'en',
+        language: 'en-US',
+        file: 'en.json'
+      },
+      // {
+      //   code: 'zh',
+      //   language: 'zh-TW',
+      //   file: 'zh.json'
+      // }
+    ],
+    lazy: true,
+    defaultLocale: 'en',
   },
 
   devtools: { enabled: true },

@@ -1,0 +1,92 @@
+{
+  "title": "CBOR to JSON Online Converter",
+  "subtitle": "Convert CBOR from/to JSON string",
+  "cbor": {
+    "label": "CBOR",
+    "encoding": "Encoding",
+    "encodingOptions": {
+      "base64": "base64",
+      "hex": "hex"
+    }
+  },
+
+  "json": {
+    "label": "JSON",
+    "bufferFormat": "Buffer Format:",
+    "formatOptions": {
+      "none": "none",
+      "base64": "base64",
+      "hex": "hex"
+    }
+  },
+
+  "settings": {
+    "title": "Conversion Settings",
+    "setToArray": "Convert Set to Array"
+  },
+
+  "sections": {
+    "whatIs": {
+      "title": "What is this tool?",
+      "content": [
+        "This website is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation). It allows you to encode and decode data in CBOR and JSON formats.",
+        "To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field above."
+      ]
+    },
+    "whatIsCbor": {
+      "title": "What is CBOR?",
+      "content": [
+        "CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where size and performance are important.",
+        "For more information, you can visit the {0}."
+      ],
+      "link": "CBOR website"
+    },
+    "bufferHandling": {
+      "title": "Buffer Handling",
+      "content": ["When converting from JSON to CBOR, if a stringified Buffer object is detected in the JSON (e.g. \"type\":\"Buffer\",\"data\":[1,2,3]), it will be automatically converted back to a Buffer in the CBOR output."]
+    },
+    "arrayBuffer": {
+      "title": "ArrayBuffer Display Options",
+      "content": [
+        "ArrayBufferLike values in CBOR cannot be directly stringified to JSON. To handle this, you can choose how to display buffer-like values when converting from CBOR to JSON using the \"Buffer Format\" dropdown:",
+        "Note that these display options only affect CBOR to JSON conversion. When converting from JSON to CBOR, buffer-like values need to be properly formatted as Buffer objects."
+      ],
+      "options": {
+        "none": "none: Keep as is",
+        "base64": "base64: Convert to base64 string",
+        "hex": "hex: Convert to hexadecimal string"
+      }
+    },
+    "setSupport": {
+      "title": "Set Support",
+      "content": [
+        "CBOR supports Set data structures, but these cannot be directly stringified to JSON. By default, Sets are automatically converted to Arrays when converting from CBOR to JSON.",
+        "You can toggle this behavior in the settings menu (gear icon) next to the Buffer Format selector. When disabled, Sets will be preserved as objects with their original type information."
+      ]
+    },
+    "source": {
+      "title": "Source, Issues and Development",
+      "content": "Explore the {0} to view the source code, contribute to pull requests and issues.",
+      "link": "GitHub repository"
+    },
+    "about": {
+      "title": "About me",
+      "content": "Visit {0} for more developer tips and stories.",
+      "link": "my blog"
+    }
+  },
+  "layout": {
+    "meta": {
+      "title": "CBOR to JSON Online Converter",
+      "description": "Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder.",
+      "ogTitle": "CBOR to JSON Online Converter",
+      "ogDescription": "Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder."
+    }
+  },
+  "components": {
+    "copyButton": {
+      "copy": "Copy to clipboard",
+      "copied": "Copied!"
+    }
+  }
+}

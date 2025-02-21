@@ -1,22 +1,22 @@
 <template>
   <div class="min-h-screen bg-gray-50 p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">CBOR to JSON Online Converter</h1>
-      <p class="text-gray-600 mb-8">Convert CBOR from/to JSON string</p>
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{{ $t('title') }}</h1>
+      <p class="text-gray-600 mb-8">{{ $t('subtitle') }}</p>
 
       <section class="flex flex-col md:flex-row gap-6 mb-12">
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2">
-            <label for="cbor-value" class="text-sm font-medium text-gray-700">CBOR</label>
+            <label for="cbor-value" class="text-sm font-medium text-gray-700">{{ $t('cbor.label') }}</label>
             <div class="flex items-center gap-4 mx-2">
-              <label for="cbor-encoding" class="text-sm font-medium text-gray-700">Encoding</label>
+              <label for="cbor-encoding" class="text-sm font-medium text-gray-700">{{ $t('cbor.encoding') }}</label>
               <select
                 id="cbor-encoding"
                 v-model="cborEncoding"
                 class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="base64">base64</option>
-                <option value="hex">hex</option>
+                <option value="base64">{{ $t('cbor.encodingOptions.base64') }}</option>
+                <option value="hex">{{ $t('cbor.encodingOptions.hex') }}</option>
               </select>
               <button
                 class="p-1 rounded-lg hover:bg-gray-100"
@@ -48,19 +48,19 @@
         </div>
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2 mx-2">
-            <label for="json-value" class="text-sm font-medium text-gray-700">JSON</label>
+            <label for="json-value" class="text-sm font-medium text-gray-700">{{ $t('json.label') }}</label>
             <div v-if="!isJsonInput" class="flex items-center gap-4 relative">
               <div class="flex items-center gap-2">
-                <label for="buffer-format" class="text-sm font-medium text-gray-700">Buffer Format:</label>
+                <label for="buffer-format" class="text-sm font-medium text-gray-700">{{ $t('json.bufferFormat') }}</label>
                 <select
                   id="buffer-format"
                   v-model="bufferFormat"
                   class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
                   @change="onBufferFormatChange"
                 >
-                  <option value="none">none</option>
-                  <option value="base64">base64</option>
-                  <option value="hex">hex</option>
+                  <option value="none">{{ $t('json.formatOptions.none') }}</option>
+                  <option value="base64">{{ $t('json.formatOptions.base64') }}</option>
+                  <option value="hex">{{ $t('json.formatOptions.hex') }}</option>
                 </select>
               </div>
               <button
@@ -76,7 +76,7 @@
                 v-show="isSettingsOpen"
                 class="absolute right-0 top-full mt-2 w-64 p-4 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
               >
-                <h3 class="text-sm font-medium text-gray-700 mb-3">Conversion Settings</h3>
+                <h3 class="text-sm font-medium text-gray-700 mb-3">{{ $t('settings.title') }}</h3>
                 <label class="flex items-center gap-2">
                   <input
                     v-model="convertSetToArray"
@@ -84,7 +84,7 @@
                     class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     @change="onToggleSetSettings"
                   >
-                  <span class="text-sm text-gray-600">Convert Set to Array</span>
+                  <span class="text-sm text-gray-600">{{ $t('settings.setToArray') }}</span>
                 </label>
               </div>
             </div>
@@ -105,60 +105,62 @@
 
       <div class="space-y-8">
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is this tool?</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.whatIs.title') }}</h2>
           <div class="space-y-4 text-gray-600">
-            <p>This website is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation). It allows you to encode and decode data in CBOR and JSON formats.</p>
-            <p>To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field above.</p>
+            <p v-for="(text, index) in $tm('sections.whatIs.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is CBOR?</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
           <div class="space-y-4 text-gray-600">
-            <p>CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where size and performance are important.</p>
-            <p>For more information, you can visit the <a ref="noneener noreferrer" href="https://cbor.io/" target="_blank" class="text-blue-600 hover:text-blue-800">CBOR website</a>.</p>
+            <p v-for="(text, index) in $tm('sections.whatIsCbor.content')" :key="index">
+              <i18n-t v-if="index === 1" :keypath="'sections.whatIsCbor.content.' + index" tag="span">
+                <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+                  {{ $t('sections.whatIsCbor.link') }}
+                </a>
+              </i18n-t>
+              <template v-else>{{ $rt(text) }}</template>
+            </p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">Buffer Handling</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.bufferHandling.title') }}</h2>
           <div class="space-y-4 text-gray-600">
-            <p>When converting from JSON to CBOR, if a stringified Buffer object is detected in the JSON (e.g. {"type":"Buffer","data":[1,2,3]}), it will be automatically converted back to a Buffer in the CBOR output.</p>
+            <p v-for="(text, index) in $tm('sections.bufferHandling.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">ArrayBuffer Display Options</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.arrayBuffer.title') }}</h2>
           <div class="space-y-4 text-gray-600">
-            <p>ArrayBufferLike values in CBOR cannot be directly stringified to JSON. To handle this, you can choose how to display buffer-like values when converting from CBOR to JSON using the "Buffer Format" dropdown:</p>
-            <ul class="list-disc list-inside pl-4">
-              <li>none: Keep as is</li>
-              <li>base64: Convert to base64 string</li>
-              <li>hex: Convert to hexadecimal string</li>
-            </ul>
-            <p>Note that these display options only affect CBOR to JSON conversion. When converting from JSON to CBOR, buffer-like values need to be properly formatted as Buffer objects.</p>
+            <p v-for="(text, index) in $tm('sections.arrayBuffer.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">Set Support</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.setSupport.title') }}</h2>
           <div class="space-y-4 text-gray-600">
-            <p>CBOR supports Set data structures, but these cannot be directly stringified to JSON. By default, Sets are automatically converted to Arrays when converting from CBOR to JSON.</p>
-            <p>You can toggle this behavior in the settings menu (gear icon) next to the Buffer Format selector. When disabled, Sets will be preserved as objects with their original type information.</p>
+            <p v-for="(text, index) in $tm('sections.setSupport.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">Source, Issues and Development</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.source.title') }}</h2>
           <p class="text-gray-600">
-            Explore the <a href="https://github.com/williamchong/cbor-json-web" class="text-blue-600 hover:text-blue-800">GitHub repository</a> to view the source code, contribute to pull requests and issues.
+            <i18n-t keypath="sections.source.content">
+              <a href="https://github.com/williamchong/cbor-json-web" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">{{ $t('sections.source.link') }}</a>
+            </i18n-t>
           </p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">About me</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.about.title') }}</h2>
           <p class="text-gray-600">
-            Visit <a href="https://blog.williamchong.cloud" class="text-blue-600 hover:text-blue-800">my blog</a> for more developer tips and stories.
+            <i18n-t keypath="sections.about.content">
+              <a href="https://blog.williamchong.cloud" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">{{ $t('sections.about.link') }}</a>
+            </i18n-t>
           </p>
         </section>
       </div>

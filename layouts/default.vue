@@ -3,12 +3,15 @@
     <slot />
   </div>
 </template>
+
 <script setup lang="ts">
+const { t } = useI18n()
+
 useSeoMeta({
-  title: 'CBOR to JSON Online Converter',
-  description: 'Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder.',
-  ogTitle: 'CBOR to JSON Online Converter',
-  ogDescription: 'Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder.',
+  title: t('layout.meta.title'),
+  description: t('layout.meta.description'),
+  ogTitle: t('layout.meta.ogTitle'),
+  ogDescription: t('layout.meta.ogDescription'),
   ogImage: 'https://cbor.williamchong.cloud/images/cover.png',
   ogType: 'website',
 })
@@ -41,5 +44,4 @@ useHead({
     }
   ]
 })
-
 </script>
