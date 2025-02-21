@@ -1,0 +1,92 @@
+{
+  "title": "CBOR 與 JSON 在線轉換工具",
+  "subtitle": "在 CBOR 和 JSON 字串之間相互轉換",
+  "cbor": {
+    "label": "CBOR",
+    "encoding": "編碼方式",
+    "encodingOptions": {
+      "base64": "base64",
+      "hex": "hex"
+    }
+  },
+
+  "json": {
+    "label": "JSON",
+    "bufferFormat": "二進位資料格式：",
+    "formatOptions": {
+      "none": "無",
+      "base64": "base64",
+      "hex": "hex"
+    }
+  },
+
+  "settings": {
+    "title": "轉換設定",
+    "setToArray": "將集合轉換為陣列"
+  },
+
+  "sections": {
+    "whatIs": {
+      "title": "這是什麼工具？",
+      "content": [
+        "這個網站是一個 CBOR（簡潔二進位物件表示法）和 JSON（JavaScript 物件表示法）的在線轉換工具。它能讓你對 CBOR 和 JSON 格式的資料進行編碼和解碼。",
+        "開始使用時，只需要將你的 CBOR 值（以 base64 或十六進位格式）或 JSON 字串貼到上方對應的輸入欄位即可。"
+      ]
+    },
+    "whatIsCbor": {
+      "title": "什麼是 CBOR？",
+      "content": [
+        "CBOR（簡潔二進位物件表示法）是一種比 JSON 更小巧、更高效的二進位資料格式。它提供了結構化資料的緊湊二進位表示，特別適用於對大小和效能要求較高的場景。",
+        "想了解更多資訊，你可以訪問 {0}。"
+      ],
+      "link": "CBOR 官方網站"
+    },
+    "bufferHandling": {
+      "title": "Buffer 處理",
+      "content": ["當從 JSON 轉換到 CBOR 時，如果在 JSON 中檢測到字串化的 Buffer 物件（例如 \"type\":\"Buffer\",\"data\":[1,2,3]），它會自動被轉換回 CBOR 輸出中的 Buffer。"]
+    },
+    "arrayBuffer": {
+      "title": "ArrayBuffer 顯示選項",
+      "content": [
+        "CBOR 中的 ArrayBufferLike 二進位值無法直接轉換為 JSON 字串。要處理這種情況，你可以使用「二進位資料格式」下拉選單來選擇從 CBOR 轉換到 JSON 時如何顯示二進位資料類型的值：",
+        "請注意，這些顯示選項只影響 CBOR 到 JSON 的轉換。當從 JSON 轉換到 CBOR 時，二進位資料類型的值需要正確格式化為 Buffer 物件。"
+      ],
+      "options": {
+        "none": "none：保持原樣",
+        "base64": "base64：轉換為 base64 字串",
+        "hex": "hex：轉換為十六進位字串"
+      }
+    },
+    "setSupport": {
+      "title": "集合支援",
+      "content": [
+        "CBOR 支援集合資料結構，但這些結構無法直接轉換為 JSON 字串。預設情況下，從 CBOR 轉換到 JSON 時，集合會自動轉換為陣列。",
+        "你可以在二進位資料格式選擇器旁的設定選單（齒輪圖示）中切換此行為。停用時，集合保持為帶有原始類型資訊的物件。"
+      ]
+    },
+    "source": {
+      "title": "原始碼、問題與開發",
+      "content": "瀏覽 {0} 以查看原始碼、貢獻 PR 和提出問題。",
+      "link": "GitHub 儲存庫"
+    },
+    "about": {
+      "title": "關於我",
+      "content": "訪問{0}以獲取更多開發者提示和故事。",
+      "link": "我的部落格"
+    }
+  },
+  "layout": {
+    "meta": {
+      "title": "CBOR 與 JSON 在線轉換工具",
+      "description": "使用這個在線解碼器輕鬆地在 CBOR（簡潔二進位物件表示法）和 JSON（JavaScript 物件表示法）格式之間轉換資料。",
+      "ogTitle": "CBOR 與 JSON 在線轉換工具",
+      "ogDescription": "使用這個在線解碼器輕鬆地在 CBOR（簡潔二進位物件表示法）和 JSON（JavaScript 物件表示法）格式之間轉換資料。"
+    }
+  },
+  "components": {
+    "copyButton": {
+      "copy": "複製到剪貼簿",
+      "copied": "已複製！"
+    }
+  }
+}

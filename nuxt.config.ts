@@ -32,11 +32,11 @@ export default defineNuxtConfig({
         language: 'en-US',
         file: 'en.json'
       },
-      // {
-      //   code: 'zh',
-      //   language: 'zh-TW',
-      //   file: 'zh.json'
-      // }
+      {
+        code: 'zh',
+        language: 'zh-TW',
+        file: 'zh.json'
+      }
     ],
     lazy: true,
     defaultLocale: 'en',
