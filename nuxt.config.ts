@@ -8,13 +8,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [
-    'nuxt-gtag',
-    '@nuxtjs/i18n',
-    '@nuxtjs/tailwindcss',
-    '@nuxt/eslint',
-    '@nuxt/icon',
-  ],
+  modules: ['nuxt-gtag', '@nuxtjs/i18n', '@nuxtjs/tailwindcss', '@nuxt/eslint', '@nuxt/icon', '@nuxtjs/sitemap'],
 
   gtag: {
     id: 'G-PG6KXFFZPF',
@@ -40,6 +34,10 @@ export default defineNuxtConfig({
     ],
     lazy: true,
     defaultLocale: 'en',
+  },
+  site: {
+    url: 'https://cbor.williamchong.cloud',
+    name: 'CBOR to JSON Online Converter',
   },
 
   devtools: { enabled: true },
