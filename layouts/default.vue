@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const i18nHead = useLocaleHead()
 
 useSeoMeta({
   title: t('layout.meta.title'),
@@ -37,6 +38,11 @@ const jsonLd = {
 }
 
 useHead({
+  htmlAttrs: {
+    lang: i18nHead.value.htmlAttrs!.lang
+  },
+  link: [...(i18nHead.value.link || [])],
+  meta: [...(i18nHead.value.meta || [])],
   script: [
     {
       type: 'application/ld+json',
