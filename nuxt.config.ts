@@ -30,6 +30,11 @@ export default defineNuxtConfig({
         code: 'zh',
         language: 'zh-TW',
         file: 'zh.json'
+      },
+      {
+        code: 'ja',
+        language: 'ja-JP',
+        file: 'ja.json'
       }
     ],
     lazy: true,

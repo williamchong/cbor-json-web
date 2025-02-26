@@ -1,0 +1,92 @@
+{
+  "title": "CBOR と JSON オンライン変換ツール",
+  "subtitle": "CBOR と JSON 文字列の相互変換",
+  "cbor": {
+    "label": "CBOR",
+    "encoding": "エンコーディング",
+    "encodingOptions": {
+      "base64": "base64",
+      "hex": "hex"
+    }
+  },
+
+  "json": {
+    "label": "JSON",
+    "bufferFormat": "バッファー形式：",
+    "formatOptions": {
+      "none": "なし",
+      "base64": "base64",
+      "hex": "hex"
+    }
+  },
+
+  "settings": {
+    "title": "変換設定",
+    "setToArray": "Setを配列に変換"
+  },
+
+  "sections": {
+    "whatIs": {
+      "title": "このツールについて",
+      "content": [
+        "このウェブサイトは、CBOR（Concise Binary Object Representation）とJSON（JavaScript Object Notation）のオンライン変換ツールです。CBORとJSON形式のデータのエンコードとデコードが可能です。",
+        "使い方は簡単で、上記の入力フィールドにCBOR値（base64形式またはhex形式）またはJSON文字列を貼り付けるだけです。"
+      ]
+    },
+    "whatIsCbor": {
+      "title": "CBORとは？",
+      "content": [
+        "CBOR（Concise Binary Object Representation）は、JSONよりもコンパクトで効率的なバイナリデータ形式です。構造化データのコンパクトなバイナリ表現を提供し、サイズとパフォーマンスが重要なシーンに適しています。",
+        "詳細については、{0}をご覧ください。"
+      ],
+      "link": "CBORウェブサイト"
+    },
+    "bufferHandling": {
+      "title": "バッファーの処理",
+      "content": ["JSONからCBORへの変換時、JSON内で文字列化されたBufferオブジェクト（例：\"type\":\"Buffer\",\"data\":[1,2,3]）が検出された場合、CBOR出力では自動的にBufferに変換されます。"]
+    },
+    "arrayBuffer": {
+      "title": "ArrayBufferの表示オプション",
+      "content": [
+        "CBOR内のArrayBufferLike値は直接JSONに文字列化できません。CBORからJSONへの変換時にバッファーのような値の表示方法を「バッファー形式」ドロップダウンで選択できます：",
+        "これらの表示オプションはCBORからJSONへの変換にのみ影響することに注意してください。JSONからCBORへの変換時、バッファーのような値は適切にBufferオブジェクトとしてフォーマットされる必要があります。"
+      ],
+      "options": {
+        "none": "なし：そのまま保持",
+        "base64": "base64：base64文字列に変換",
+        "hex": "hex：16進数文字列に変換"
+      }
+    },
+    "setSupport": {
+      "title": "Setのサポート",
+      "content": [
+        "CBORはSetデータ構造をサポートしていますが、これらは直接JSONに文字列化できません。デフォルトでは、CBORからJSONへの変換時にSetは自動的に配列に変換されます。",
+        "この動作は、バッファー形式セレクターの横にある設定メニュー（歯車アイコン）で切り替えることができます。無効にすると、Setは元の型情報を持つオブジェクトとして保持されます。"
+      ]
+    },
+    "source": {
+      "title": "ソース、課題と開発",
+      "content": "ソースコードの閲覧、プルリクエストや課題の投稿は{0}で行えます。",
+      "link": "GitHubリポジトリ"
+    },
+    "about": {
+      "title": "開発者について",
+      "content": "開発者のヒントやストーリーについては{0}をご覧ください。",
+      "link": "開発者ブログ"
+    }
+  },
+  "layout": {
+    "meta": {
+      "title": "CBOR と JSON オンライン変換ツール",
+      "description": "このオンラインデコーダーを使用して、CBOR（Concise Binary Object Representation）とJSON（JavaScript Object Notation）形式のデータを簡単に変換できます。",
+      "ogTitle": "CBOR と JSON オンライン変換ツール",
+      "ogDescription": "このオンラインデコーダーを使用して、CBOR（Concise Binary Object Representation）とJSON（JavaScript Object Notation）形式のデータを簡単に変換できます。"
+    }
+  },
+  "components": {
+    "copyButton": {
+      "copy": "クリップボードにコピー",
+      "copied": "コピーしました！"
+    }
+  }
+}
