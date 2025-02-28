@@ -2,6 +2,7 @@
   <button
     class="absolute top-2 right-2 p-1 text-gray-500 hover:text-gray-700 bg-white/80 rounded-lg shadow-sm border border-gray-200"
     :title="!copied ? t('components.copyButton.copy') : t('components.copyButton.copied')"
+    :alt="t('components.copyButton.copy')"
     @click="copyText"
   >
     <Icon

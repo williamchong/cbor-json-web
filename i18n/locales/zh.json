@@ -7,7 +7,8 @@
     "encodingOptions": {
       "base64": "base64",
       "hex": "hex"
-    }
+    },
+    "uploadFile": "上傳檔案"
   },
 
   "json": {

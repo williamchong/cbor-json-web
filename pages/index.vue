@@ -20,6 +20,8 @@
               </select>
               <button
                 class="p-1 rounded-lg hover:bg-gray-100"
+                :title="$t('cbor.uploadFile')"
+                :alt="$t('cbor.uploadFile')"
                 @click="$refs.fileInput.click()"
               >
                 <Icon
@@ -65,6 +67,8 @@
               </div>
               <button
                 class="p-1 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :title="$t('settings.title')"
+                :alt="$t('settings.title')"
                 @click="onClickSettings"
               >
                 <Icon
