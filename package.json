@@ -1,6 +1,5 @@
 {
-  "name": "nuxt-app",
-  "private": true,
+  "name": "cbor-json-web",
   "type": "module",
   "scripts": {
     "build": "nuxt build",
@@ -12,19 +11,19 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@nuxt/eslint": "1.0.1",
     "@nuxt/icon": "1.10.3",
     "@nuxtjs/i18n": "9.2.0",
     "@nuxtjs/sitemap": "7.2.6",
     "@nuxtjs/tailwindcss": "6.13.1",
     "cbor-x": "^1.5.9",
-    "eslint": "^9.0.0",
     "nuxt": "^3.15.4",
     "nuxt-gtag": "^2.0.6",
     "vue": "latest"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
   "devDependencies": {
+    "@nuxt/eslint": "1.0.1",
+    "eslint": "^9.0.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
   }
