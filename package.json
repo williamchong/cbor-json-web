@@ -16,6 +16,7 @@
     "@nuxtjs/i18n": "9.2.0",
     "@nuxtjs/sitemap": "7.2.6",
     "@nuxtjs/tailwindcss": "6.13.1",
+    "@sentry/nuxt": "^9",
     "cbor-x": "^1.5.9",
     "nuxt": "^3.15.4",
     "nuxt-gtag": "^2.0.6",
@@ -28,5 +29,8 @@
     "typescript": "^5.8.3",
     "vitest": "^3.0.5",
     "vue-tsc": "^2.2.10"
+  },
+  "resolutions": {
+    "@vercel/nft": "^0.27.4"
   }
 }

@@ -8,11 +8,20 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-gtag', '@nuxtjs/i18n', '@nuxtjs/tailwindcss', '@nuxt/eslint', '@nuxt/icon', '@nuxtjs/sitemap'],
+  modules: [
+    'nuxt-gtag',
+    '@nuxtjs/i18n',
+    '@nuxtjs/tailwindcss',
+    '@nuxt/eslint',
+    '@nuxt/icon',
+    '@nuxtjs/sitemap',
+    '@sentry/nuxt/module',
+  ],
 
   gtag: {
     id: 'G-PG6KXFFZPF',
   },
+
   i18n: {
     baseUrl: 'https://cbor.williamchong.cloud',
     strategy: 'prefix_and_default',
@@ -40,12 +49,14 @@ export default defineNuxtConfig({
     lazy: true,
     defaultLocale: 'en',
   },
+
   site: {
     url: 'https://cbor.williamchong.cloud',
     name: 'CBOR to JSON Online Converter',
   },
 
   devtools: { enabled: true },
+
   nitro: {
     preset: "cloudflare-pages"
   },
@@ -55,4 +66,15 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-02-13',
+
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: 'williamchong',
+      project: 'cbor-convertor',
+    },
+  },
+
+  sourcemap: {
+    client: 'hidden',
+  },
 });
