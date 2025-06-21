@@ -18,6 +18,8 @@ jobs:
       run: yarn
     - name: Run lint
       run: yarn lint
+    - name: Run type check
+      run: yarn typecheck
     - name: Run tests
       run: yarn test
     - name: Build

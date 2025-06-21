@@ -22,7 +22,7 @@
                 class="p-1 rounded-lg hover:bg-gray-100"
                 :title="$t('cbor.uploadFile')"
                 :alt="$t('cbor.uploadFile')"
-                @click="$refs.fileInput.click()"
+                @click="fileInput?.click()"
               >
                 <Icon
                   name="material-symbols:upload-file"
