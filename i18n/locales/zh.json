@@ -23,7 +23,12 @@
 
   "settings": {
     "title": "轉換設定",
-    "setToArray": "將集合轉換為陣列"
+    "setToArray": "將集合轉換為陣列",
+    "bigintFormat": {
+      "label": "BigInt 格式",
+      "string": "數字字串（'123'）",
+      "literal": "字面常數字串（'123n'）"
+    }
   },
 
   "sections": {

@@ -88,6 +88,34 @@ describe('CBOR Utils', () => {
       expect(parsed.array[0]).toBe('111');
       expect(parsed.array[1]).toBe('222');
     });
+
+    it('should handle BigInt with literal format option', () => {
+      const bigIntValue = BigInt('9007199254740991');
+      const cborHex = Buffer.from(encode({ bigNumber: bigIntValue })).toString('hex');
+      const result = cborToJsonString(cborHex, 'hex', { bigintFormat: 'literal' });
+      expect(result).toContain('"9007199254740991n"');
+      expect(JSON.parse(result).bigNumber).toBe('9007199254740991n');
+    });
+
+    it('should handle multiple BigInt values with literal format in complex objects', () => {
+      const data = {
+        smallBigInt: BigInt('123'),
+        largeBigInt: BigInt('12345678901234567890'),
+        nested: {
+          anotherBigInt: BigInt('999999999999999999')
+        },
+        array: [BigInt('111'), BigInt('222')]
+      };
+      const cborHex = Buffer.from(encode(data)).toString('hex');
+      const result = cborToJsonString(cborHex, 'hex', { bigintFormat: 'literal' });
+      const parsed = JSON.parse(result);
+      
+      expect(parsed.smallBigInt).toBe('123n');
+      expect(parsed.largeBigInt).toBe('12345678901234567890n');
+      expect(parsed.nested.anotherBigInt).toBe('999999999999999999n');
+      expect(parsed.array[0]).toBe('111n');
+      expect(parsed.array[1]).toBe('222n');
+    });
   })
 
   describe('jsonStringToCbor', () => {
@@ -130,6 +158,61 @@ describe('CBOR Utils', () => {
 
     it('should return empty string for empty input', () => {
       expect(jsonStringToCbor('', 'base64')).toBe('')
+    })
+
+    it('should parse bigint literals back to BigInt', () => {
+      const json = JSON.stringify({
+        bigNumber: '9007199254740991n',
+        smallBig: '123n'
+      }, null, 2)
+      const result = jsonStringToCbor(json, 'hex')
+      const backToJson = cborToJsonString(result, 'hex')
+      const parsed = JSON.parse(backToJson)
+      
+      expect(parsed.bigNumber).toBe('9007199254740991')
+      expect(parsed.smallBig).toBe('123')
+    })
+
+    it('should handle round-trip conversion with bigint literal format', () => {
+      const originalData = {
+        bigInt: BigInt('12345678901234567890'),
+        regularString: '123n_not_bigint',
+        number: 42
+      }
+      const cborHex = Buffer.from(encode(originalData)).toString('hex')
+      
+      // Convert to JSON with literal format
+      const jsonWithLiteral = cborToJsonString(cborHex, 'hex', { bigintFormat: 'literal' })
+      
+      // Convert back to CBOR
+      const backToCbor = jsonStringToCbor(jsonWithLiteral, 'hex')
+      
+      // Convert back to JSON with regular format
+      const finalJson = cborToJsonString(backToCbor, 'hex', { bigintFormat: 'string' })
+      const parsed = JSON.parse(finalJson)
+      
+      expect(parsed.bigInt).toBe('12345678901234567890')
+      expect(parsed.regularString).toBe('123n_not_bigint')
+      expect(parsed.number).toBe(42)
+    })
+
+    it('should not parse invalid bigint literal strings', () => {
+      const json = JSON.stringify({
+        validBigint: '123n',
+        invalidBigint1: '123nn',
+        invalidBigint2: 'n123',
+        invalidBigint3: '12.3n',
+        regularString: 'normal string'
+      }, null, 2)
+      const result = jsonStringToCbor(json, 'hex')
+      const backToJson = cborToJsonString(result, 'hex')
+      const parsed = JSON.parse(backToJson)
+      
+      expect(parsed.validBigint).toBe('123')
+      expect(parsed.invalidBigint1).toBe('123nn')
+      expect(parsed.invalidBigint2).toBe('n123')
+      expect(parsed.invalidBigint3).toBe('12.3n')
+      expect(parsed.regularString).toBe('normal string')
     })
   })
 })

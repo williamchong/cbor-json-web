@@ -23,7 +23,12 @@
 
   "settings": {
     "title": "変換設定",
-    "setToArray": "Setを配列に変換"
+    "setToArray": "Setを配列に変換",
+    "bigintFormat": {
+      "label": "BigInt形式",
+      "string": "文字列（デフォルト）",
+      "literal": "リテラル（123n）"
+    }
   },
 
   "sections": {

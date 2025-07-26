@@ -81,15 +81,42 @@
                 class="absolute right-0 top-full mt-2 w-64 p-4 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
               >
                 <h3 class="text-sm font-medium text-gray-700 mb-3">{{ $t('settings.title') }}</h3>
-                <label class="flex items-center gap-2">
-                  <input
-                    v-model="convertSetToArray"
-                    type="checkbox"
-                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    @change="onToggleSetSettings"
-                  >
-                  <span class="text-sm text-gray-600">{{ $t('settings.setToArray') }}</span>
-                </label>
+                <div class="space-y-3">
+                  <label class="flex items-center gap-2">
+                    <input
+                      v-model="convertSetToArray"
+                      type="checkbox"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      @change="onToggleSetSettings"
+                    >
+                    <span class="text-sm text-gray-600">{{ $t('settings.setToArray') }}</span>
+                  </label>
+                  <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700">{{ $t('settings.bigintFormat.label') }}</label>
+                    <div class="space-y-2">
+                      <label class="flex items-center gap-2">
+                        <input
+                          v-model="bigintFormat"
+                          type="radio"
+                          value="string"
+                          class="text-blue-600 focus:ring-blue-500"
+                          @change="onToggleBigintSettings"
+                        >
+                        <span class="text-sm text-gray-600">{{ $t('settings.bigintFormat.string') }}</span>
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input
+                          v-model="bigintFormat"
+                          type="radio"
+                          value="literal"
+                          class="text-blue-600 focus:ring-blue-500"
+                          @change="onToggleBigintSettings"
+                        >
+                        <span class="text-sm text-gray-600">{{ $t('settings.bigintFormat.literal') }}</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div v-else class="p-4" />
@@ -175,7 +202,7 @@
 <script setup lang="ts">
 import { encode } from 'cbor-x'
 import { Buffer } from 'node:buffer'
-import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputFormat } from '~/utils/cbor'
+import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputFormat, type BigintOutputFormat } from '~/utils/cbor'
 
 const cborValue = ref('')
 const jsonValue = ref('')
@@ -189,6 +216,7 @@ const jsonPlaceHolder = JSON.stringify({
 })
 const cborPlaceHolder = computed(() => Buffer.from(encode(JSON.parse(jsonPlaceHolder))).toString(cborEncoding.value))
 const bufferFormat = ref<BufferOutputFormat>('none')
+const bigintFormat = ref<BigintOutputFormat>('string')
 const isJsonInput = ref(false)
 const convertSetToArray = ref(true)
 const isSettingsOpen = ref(false)
@@ -238,6 +266,13 @@ function onToggleSetSettings() {
   cborToJson()
 }
 
+function onToggleBigintSettings() {
+  useTrackEvent('toggle_settings_bigint_format', {
+    format: bigintFormat.value
+  })
+  cborToJson()
+}
+
 async function handleFileUpload(event: Event) {
   useTrackEvent('select_file')
   const file = (event.target as HTMLInputElement).files?.[0]
@@ -267,7 +302,8 @@ function cborToJson() {
     }
     jsonValue.value = cborToJsonString(cborValue.value, cborEncoding.value, {
       bufferFormat: bufferFormat.value,
-      convertSetToArray: convertSetToArray.value
+      convertSetToArray: convertSetToArray.value,
+      bigintFormat: bigintFormat.value
     })
     useTrackEvent('convert_cbor_to_json')
   } catch (e) {

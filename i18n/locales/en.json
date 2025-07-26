@@ -23,7 +23,12 @@
 
   "settings": {
     "title": "Conversion Settings",
-    "setToArray": "Convert Set to Array"
+    "setToArray": "Convert Set to Array",
+    "bigintFormat": {
+      "label": "BigInt Format",
+      "string": "String ('123')",
+      "literal": "Literal String ('123n')"
+    }
   },
 
   "sections": {
