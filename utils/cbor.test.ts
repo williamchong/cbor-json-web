@@ -60,6 +60,34 @@ describe('CBOR Utils', () => {
       expect(jsonWithSet).toContain('{}');
       expect(jsonWithArray).toBe(JSON.stringify({ data: Array.from(set) }, null, 2));
     });
+
+    it('should handle BigInt values by converting to string', () => {
+      const bigIntValue = BigInt('9007199254740991');
+      const cborHex = Buffer.from(encode({ bigNumber: bigIntValue })).toString('hex');
+      const result = cborToJsonString(cborHex, 'hex');
+      expect(result).toContain('"9007199254740991"');
+      expect(JSON.parse(result).bigNumber).toBe('9007199254740991');
+    });
+
+    it('should handle multiple BigInt values in complex objects', () => {
+      const data = {
+        smallBigInt: BigInt('123'),
+        largeBigInt: BigInt('12345678901234567890'),
+        nested: {
+          anotherBigInt: BigInt('999999999999999999')
+        },
+        array: [BigInt('111'), BigInt('222')]
+      };
+      const cborHex = Buffer.from(encode(data)).toString('hex');
+      const result = cborToJsonString(cborHex, 'hex');
+      const parsed = JSON.parse(result);
+      
+      expect(parsed.smallBigInt).toBe('123');
+      expect(parsed.largeBigInt).toBe('12345678901234567890');
+      expect(parsed.nested.anotherBigInt).toBe('999999999999999999');
+      expect(parsed.array[0]).toBe('111');
+      expect(parsed.array[1]).toBe('222');
+    });
   })
 
   describe('jsonStringToCbor', () => {

@@ -40,6 +40,9 @@ export function cborToJsonString(
   if (!cborValue) return '';
   const cbor = decode(stringToBuffer(cborValue, encoding))
   return JSON.stringify(cbor, (key, value) => {
+    if (typeof value === 'bigint') {
+      return value.toString();
+    }
     if ( isBufferObject(value)|| ArrayBuffer.isView(value)) {
       const actualBuffer = value?.buffer || value;
       switch (bufferFormat) {
