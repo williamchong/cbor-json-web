@@ -222,20 +222,6 @@ const convertSetToArray = ref(true)
 const isSettingsOpen = ref(false)
 const fileInput = ref<HTMLInputElement>()
 
-useHead({
-  link: [
-    { rel: 'preload', as: 'script', href: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384552213891537', crossorigin: 'anonymous' },
-  ],
-})
-
-onMounted(() => {
-  useHead({
-    script: [
-      { src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384552213891537', async: true, crossorigin: 'anonymous' },
-    ],
-  })
-})
-
 watch(cborEncoding, () => {
   if (isJsonInput.value) {
     jsonToCbor()
