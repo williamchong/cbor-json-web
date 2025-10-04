@@ -26,10 +26,11 @@ const props = defineProps<{
 }>()
 
 const copied = ref(false)
+const { trackEvent } = useAnalytics()
 
 async function copyText() {
   await navigator.clipboard.writeText(props.text)
-  useTrackEvent('copy')
+  trackEvent('copy')
   copied.value = true
   setTimeout(() => {
     copied.value = false

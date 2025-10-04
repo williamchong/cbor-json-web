@@ -224,6 +224,8 @@ const convertSetToArray = ref(true)
 const isSettingsOpen = ref(false)
 const fileInput = ref<HTMLInputElement>()
 
+const { trackEvent } = useAnalytics()
+
 watch(cborEncoding, () => {
   if (isJsonInput.value) {
     jsonToCbor()
@@ -238,31 +240,30 @@ watch(bufferFormat, () => {
 })
 
 function onBufferFormatChange() {
-  useTrackEvent('toggle_buffer_format', {
+  trackEvent('toggle_buffer_format', {
     format: bufferFormat.value
   })
 }
 
 function onClickSettings() {
-  useTrackEvent('toggle_settings')
+  trackEvent('toggle_settings')
   isSettingsOpen.value = !isSettingsOpen.value
 }
 
 function onToggleSetSettings() {
-  useTrackEvent('toggle_settings_set_conversion', {
-  })
+  trackEvent('toggle_settings_set_conversion')
   cborToJson()
 }
 
 function onToggleBigintSettings() {
-  useTrackEvent('toggle_settings_bigint_format', {
+  trackEvent('toggle_settings_bigint_format', {
     format: bigintFormat.value
   })
   cborToJson()
 }
 
 async function handleFileUpload(event: Event) {
-  useTrackEvent('select_file')
+  trackEvent('select_file')
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
 
@@ -293,7 +294,7 @@ function cborToJson() {
       convertSetToArray: convertSetToArray.value,
       bigintFormat: bigintFormat.value
     })
-    useTrackEvent('convert_cbor_to_json')
+    trackEvent('convert_cbor_to_json')
   } catch (e) {
     jsonValue.value = (e as Error).message
   }
@@ -303,7 +304,7 @@ function jsonToCbor() {
   isJsonInput.value = true
   try {
     cborValue.value = jsonStringToCbor(jsonValue.value, cborEncoding.value)
-    useTrackEvent('convert_json_to_cbor')
+    trackEvent('convert_json_to_cbor')
   } catch (e) {
     cborValue.value = (e as Error).message
   }
