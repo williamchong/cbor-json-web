@@ -16,7 +16,16 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxtjs/sitemap',
     '@sentry/nuxt/module',
+    '@nuxt/scripts',
   ],
+
+  scripts: {
+    registry: {
+      clarity: {
+        id: 'tkugyjvqz5'
+      }
+    }
+  },
 
   gtag: {
     id: 'G-PG6KXFFZPF',
