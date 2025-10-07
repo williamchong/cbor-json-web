@@ -1,6 +1,9 @@
 {
   "name": "cbor-json-web",
   "type": "module",
+  "engines": {
+    "node": ">=20.19.5"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
