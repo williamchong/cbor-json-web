@@ -27,9 +27,8 @@ function isBufferObject(value: any): boolean {
   return value instanceof Buffer || value?.type === 'Buffer' && Array.isArray(value?.data);
 }
 
-export function cborToJsonString(
-  cborValue: string,
-  encoding: BufferEncoding,
+export function valueToJsonString(
+  value: unknown,
   {
     bufferFormat = 'none',
     convertSetToArray = false,
@@ -39,10 +38,8 @@ export function cborToJsonString(
     convertSetToArray?: boolean;
     bigintFormat?: BigintOutputFormat;
   } = {}
-) {
-  if (!cborValue) return '';
-  const cbor = decode(stringToBuffer(cborValue, encoding))
-  return JSON.stringify(cbor, (key, value) => {
+): string {
+  return JSON.stringify(value, (key, value) => {
     if (typeof value === 'bigint') {
       return bigintFormat === 'literal' ? `${value.toString()}n` : value.toString();
     }
@@ -62,6 +59,28 @@ export function cborToJsonString(
     }
     return value;
   }, 2)
+}
+
+export function cborToJsonString(
+  cborValue: string,
+  encoding: BufferEncoding,
+  {
+    bufferFormat = 'none',
+    convertSetToArray = false,
+    bigintFormat = 'string',
+  }: {
+    bufferFormat?: BufferOutputFormat;
+    convertSetToArray?: boolean;
+    bigintFormat?: BigintOutputFormat;
+  } = {}
+) {
+  if (!cborValue) return '';
+  const cbor = decode(stringToBuffer(cborValue, encoding))
+  return valueToJsonString(cbor, {
+    bufferFormat,
+    convertSetToArray,
+    bigintFormat,
+  });
 }
 
 export function jsonStringToCbor(jsonValue: string, encoding: BufferEncoding): string {

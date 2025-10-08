@@ -12,8 +12,8 @@
               <label for="cbor-encoding" class="text-sm font-medium text-gray-700">{{ $t('cbor.encoding') }}</label>
               <select
                 id="cbor-encoding"
-                v-model="cborEncoding"
                 class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+                @change="onEncodingChange"
               >
                 <option value="base64">{{ $t('cbor.encodingOptions.base64') }}</option>
                 <option value="hex">{{ $t('cbor.encodingOptions.hex') }}</option>
@@ -57,7 +57,6 @@
                 <label for="buffer-format" class="text-sm font-medium text-gray-700">{{ $t('json.bufferFormat') }}</label>
                 <select
                   id="buffer-format"
-                  v-model="bufferFormat"
                   class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
                   @change="onBufferFormatChange"
                 >
@@ -127,7 +126,7 @@
               id="json-value"
               v-model="jsonValue"
               data-clarity-mask="true"
-              :placeholder="jsonPlaceHolder"
+              :placeholder="jsonPlaceHolderString"
               class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
               @input="jsonToCbor"
             />
@@ -209,14 +208,20 @@ import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputF
 const cborValue = ref('')
 const jsonValue = ref('')
 const cborEncoding = ref('base64' as BufferEncoding)
-const jsonPlaceHolder = JSON.stringify({
+const jsonPlaceHolder = {
   hello: 'world',
   array: [1, 2, 3],
   nested: {
     key: 'value'
-  }
-})
-const cborPlaceHolder = computed(() => Buffer.from(encode(JSON.parse(jsonPlaceHolder))).toString(cborEncoding.value))
+  },
+  buffer: Buffer.from('example data')
+}
+const jsonPlaceHolderString = computed(() => valueToJsonString(jsonPlaceHolder, {
+  bufferFormat: bufferFormat.value,
+  convertSetToArray: convertSetToArray.value,
+  bigintFormat: bigintFormat.value
+}))
+const cborPlaceHolder = computed(() => Buffer.from(encode(jsonPlaceHolder)).toString(cborEncoding.value))
 const bufferFormat = ref<BufferOutputFormat>('none')
 const bigintFormat = ref<BigintOutputFormat>('string')
 const isJsonInput = ref(false)
@@ -239,7 +244,15 @@ watch(bufferFormat, () => {
   cborToJson()
 })
 
-function onBufferFormatChange() {
+function onEncodingChange(e: Event) {
+  cborEncoding.value = (e.target as HTMLSelectElement).value as BufferEncoding
+  trackEvent('toggle_cbor_encoding', {
+    encoding: cborEncoding.value
+  })
+}
+
+function onBufferFormatChange(e: Event) {
+  bufferFormat.value = (e.target as HTMLSelectElement).value as BufferOutputFormat
   trackEvent('toggle_buffer_format', {
     format: bufferFormat.value
   })
@@ -284,6 +297,10 @@ async function handleFileUpload(event: Event) {
 function cborToJson() {
   isJsonInput.value = false
   try {
+    if (!cborValue.value) {
+      jsonValue.value = ''
+      return
+    }
     if (isBase64(cborValue.value) && !isHex(cborValue.value)) {
       cborEncoding.value = 'base64'
     } else if (!isBase64(cborValue.value) && isHex(cborValue.value)) {
