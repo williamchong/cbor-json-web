@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@sentry/nuxt/module',
     '@nuxt/scripts',
+    '@nuxtjs/color-mode',
   ],
 
   scripts: {
@@ -75,6 +76,12 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-02-13',
+
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light',
+  },
 
   sentry: {
     sourceMapsUploadOptions: {

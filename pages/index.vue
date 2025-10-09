@@ -1,32 +1,35 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-4 md:p-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-8 transition-colors">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{{ $t('title') }}</h1>
-      <p class="text-gray-600 mb-8">{{ $t('subtitle') }}</p>
+      <div class="flex justify-between items-center mb-2">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">{{ $t('title') }}</h1>
+        <ClientOnly><ColorModeToggle /></ClientOnly>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-8">{{ $t('subtitle') }}</p>
 
       <section class="flex flex-col md:flex-row gap-6 mb-12">
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2">
-            <label for="cbor-value" class="text-sm font-medium text-gray-700">{{ $t('cbor.label') }}</label>
+            <label for="cbor-value" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('cbor.label') }}</label>
             <div class="flex items-center gap-4 mx-2">
-              <label for="cbor-encoding" class="text-sm font-medium text-gray-700">{{ $t('cbor.encoding') }}</label>
+              <label for="cbor-encoding" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('cbor.encoding') }}</label>
               <select
                 id="cbor-encoding"
-                class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500"
                 @change="onEncodingChange"
               >
                 <option value="base64">{{ $t('cbor.encodingOptions.base64') }}</option>
                 <option value="hex">{{ $t('cbor.encodingOptions.hex') }}</option>
               </select>
               <button
-                class="p-1 rounded-lg hover:bg-gray-100"
+                class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                 :title="$t('cbor.uploadFile')"
                 :alt="$t('cbor.uploadFile')"
                 @click="fileInput?.click()"
               >
                 <Icon
                   name="material-symbols:upload-file"
-                  class="w-4 h-4"
+                  class="w-4 h-4 text-gray-700 dark:text-gray-300"
                 />
               </button>
               <input
@@ -43,7 +46,7 @@
               v-model="cborValue"
               data-clarity-mask="true"
               :placeholder="cborPlaceHolder"
-              class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
+              class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none"
               @input="cborToJson"
             />
             <CopyButton :text="cborValue" />
@@ -51,13 +54,13 @@
         </div>
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2 mx-2">
-            <label for="json-value" class="text-sm font-medium text-gray-700">{{ $t('json.label') }}</label>
+            <label for="json-value" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('json.label') }}</label>
             <div v-if="!isJsonInput" class="flex items-center gap-4 relative">
               <div class="flex items-center gap-2">
-                <label for="buffer-format" class="text-sm font-medium text-gray-700">{{ $t('json.bufferFormat') }}</label>
+                <label for="buffer-format" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('json.bufferFormat') }}</label>
                 <select
                   id="buffer-format"
-                  class="rounded border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+                  class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500"
                   @change="onBufferFormatChange"
                 >
                   <option value="none">{{ $t('json.formatOptions.none') }}</option>
@@ -66,33 +69,33 @@
                 </select>
               </div>
               <button
-                class="p-1 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 :title="$t('settings.title')"
                 :alt="$t('settings.title')"
                 @click="onClickSettings"
               >
                 <Icon
                   name="material-symbols:settings"
-                  class="w-4 h-4"
+                  class="w-4 h-4 text-gray-700 dark:text-gray-300"
                 />
               </button>
               <div
                 v-show="isSettingsOpen"
-                class="absolute right-0 top-full mt-2 w-64 p-4 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
+                class="absolute right-0 top-full mt-2 w-64 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10"
               >
-                <h3 class="text-sm font-medium text-gray-700 mb-3">{{ $t('settings.title') }}</h3>
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{{ $t('settings.title') }}</h3>
                 <div class="space-y-3">
                   <label class="flex items-center gap-2">
                     <input
                       v-model="convertSetToArray"
                       type="checkbox"
-                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
                       @change="onToggleSetSettings"
                     >
-                    <span class="text-sm text-gray-600">{{ $t('settings.setToArray') }}</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('settings.setToArray') }}</span>
                   </label>
                   <div class="space-y-1">
-                    <label class="text-sm font-medium text-gray-700">{{ $t('settings.bigintFormat.label') }}</label>
+                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('settings.bigintFormat.label') }}</label>
                     <div class="space-y-2">
                       <label class="flex items-center gap-2">
                         <input
@@ -102,7 +105,7 @@
                           class="text-blue-600 focus:ring-blue-500"
                           @change="onToggleBigintSettings"
                         >
-                        <span class="text-sm text-gray-600">{{ $t('settings.bigintFormat.string') }}</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('settings.bigintFormat.string') }}</span>
                       </label>
                       <label class="flex items-center gap-2">
                         <input
@@ -112,7 +115,7 @@
                           class="text-blue-600 focus:ring-blue-500"
                           @change="onToggleBigintSettings"
                         >
-                        <span class="text-sm text-gray-600">{{ $t('settings.bigintFormat.literal') }}</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('settings.bigintFormat.literal') }}</span>
                       </label>
                     </div>
                   </div>
@@ -132,18 +135,18 @@
 
       <div class="space-y-8">
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.whatIs.title') }}</h2>
-          <div class="space-y-4 text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.whatIs.title') }}</h2>
+          <div class="space-y-4 text-gray-600 dark:text-gray-400">
             <p v-for="(text, index) in $tm('sections.whatIs.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
-          <div class="space-y-4 text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
+          <div class="space-y-4 text-gray-600 dark:text-gray-400">
             <p v-for="(text, index) in $tm('sections.whatIsCbor.content')" :key="index">
               <i18n-t v-if="index === 1" :keypath="'sections.whatIsCbor.content.' + index" tag="span">
-                <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+                <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                   {{ $t('sections.whatIsCbor.link') }}
                 </a>
               </i18n-t>
@@ -153,40 +156,40 @@
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.bufferHandling.title') }}</h2>
-          <div class="space-y-4 text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.bufferHandling.title') }}</h2>
+          <div class="space-y-4 text-gray-600 dark:text-gray-400">
             <p v-for="(text, index) in $tm('sections.bufferHandling.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.arrayBuffer.title') }}</h2>
-          <div class="space-y-4 text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.arrayBuffer.title') }}</h2>
+          <div class="space-y-4 text-gray-600 dark:text-gray-400">
             <p v-for="(text, index) in $tm('sections.arrayBuffer.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.setSupport.title') }}</h2>
-          <div class="space-y-4 text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.setSupport.title') }}</h2>
+          <div class="space-y-4 text-gray-600 dark:text-gray-400">
             <p v-for="(text, index) in $tm('sections.setSupport.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.source.title') }}</h2>
-          <p class="text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.source.title') }}</h2>
+          <p class="text-gray-600 dark:text-gray-400">
             <i18n-t keypath="sections.source.content">
-              <a href="https://github.com/williamchong/cbor-json-web" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">{{ $t('sections.source.link') }}</a>
+              <a href="https://github.com/williamchong/cbor-json-web" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{{ $t('sections.source.link') }}</a>
             </i18n-t>
           </p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4">{{ $t('sections.about.title') }}</h2>
-          <p class="text-gray-600">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.about.title') }}</h2>
+          <p class="text-gray-600 dark:text-gray-400">
             <i18n-t keypath="sections.about.content">
-              <a href="https://blog.williamchong.cloud" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">{{ $t('sections.about.link') }}</a>
+              <a href="https://blog.williamchong.cloud" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{{ $t('sections.about.link') }}</a>
             </i18n-t>
           </p>
         </section>

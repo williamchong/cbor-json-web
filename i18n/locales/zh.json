@@ -93,6 +93,12 @@
     "copyButton": {
       "copy": "複製到剪貼簿",
       "copied": "已複製！"
+    },
+    "colorModeToggle": {
+      "toggle": "切換顏色模式",
+      "light": "淺色模式",
+      "dark": "深色模式",
+      "system": "系統模式"
     }
   }
 }

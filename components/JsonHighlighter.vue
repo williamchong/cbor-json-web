@@ -6,7 +6,7 @@
         ref="textareaRef"
         :value="code"
         :placeholder="placeholder"
-        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
         data-clarity-mask="true"
         @input="onInput"
         @blur="onBlur"
@@ -15,7 +15,7 @@
     <div v-else>
       <div
         v-if="highlightedCode"
-        class="json-highlighter w-full min-h-[300px] p-3 rounded-lg border border-gray-300 bg-white overflow-auto focus:ring-blue-500 focus:border-blue-500 cursor-text"
+        class="json-highlighter w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto focus:ring-blue-500 focus:border-blue-500 cursor-text"
         tabindex="0"
         @click="startEditing"
         @keydown.enter="startEditing"
@@ -23,14 +23,14 @@
       />
       <div
         v-else-if="code"
-        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 bg-white overflow-auto font-mono text-sm text-red-600 whitespace-pre-wrap cursor-text"
+        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto font-mono text-sm text-red-600 dark:text-red-400 whitespace-pre-wrap cursor-text"
         @click="startEditing"
       >
         {{ code }}
       </div>
       <div
         v-else
-        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 bg-white text-gray-400 font-mono text-sm cursor-text"
+        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 font-mono text-sm cursor-text"
         @click="startEditing"
       >
         {{ placeholder }}
@@ -53,6 +53,7 @@ const emit = defineEmits<{
   'update:code': [value: string]
 }>()
 
+const colorMode = useColorMode()
 const highlightedCode = ref<string>('')
 const isEditing = ref(false)
 const textareaRef = ref<HTMLTextAreaElement>()
@@ -94,9 +95,10 @@ async function highlightCode(code: string) {
     // Try to parse as JSON to validate
     JSON.parse(code)
 
+    const theme = colorMode.value === 'dark' ? 'github-dark' : 'github-light'
     const html = await codeToHtml(code, {
       lang: 'json',
-      theme: 'github-light'
+      theme
     })
     highlightedCode.value = html
   } catch {
@@ -119,6 +121,12 @@ watch(() => props.code, (newCode) => {
     highlightCode(newCode)
   }
 }, { immediate: true })
+
+watch(() => colorMode.value, () => {
+  if (!isEditing.value && props.code) {
+    highlightCode(props.code)
+  }
+})
 </script>
 
 <style scoped>

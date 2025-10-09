@@ -93,6 +93,12 @@
     "copyButton": {
       "copy": "Copy to clipboard",
       "copied": "Copied!"
+    },
+    "colorModeToggle": {
+      "toggle": "Toggle color mode",
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "system": "System mode"
     }
   }
 }

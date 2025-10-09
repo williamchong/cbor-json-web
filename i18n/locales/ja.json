@@ -93,6 +93,12 @@
     "copyButton": {
       "copy": "クリップボードにコピー",
       "copied": "コピーしました！"
+    },
+    "colorModeToggle": {
+      "toggle": "カラーモードを切り替え",
+      "light": "ライトモード",
+      "dark": "ダークモード",
+      "system": "システムモード"
     }
   }
 }

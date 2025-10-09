@@ -39,7 +39,11 @@ const jsonLd = {
 
 useHead({
   htmlAttrs: {
-    lang: i18nHead.value.htmlAttrs!.lang
+    lang: i18nHead.value.htmlAttrs!.lang,
+    class: 'bg-gray-50 dark:bg-gray-900'
+  },
+  bodyAttrs: {
+    class: 'bg-gray-50 dark:bg-gray-900'
   },
   link: [...(i18nHead.value.link || [])],
   meta: [...(i18nHead.value.meta || [])],
