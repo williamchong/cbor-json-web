@@ -4,37 +4,22 @@
     <div v-if="isEditing" class="relative">
       <textarea
         ref="textareaRef"
-        :value="code"
+        v-model="editableCode"
         :placeholder="placeholder"
-        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+        class="w-full h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
         data-clarity-mask="true"
-        @input="onInput"
         @blur="onBlur"
       />
     </div>
     <div v-else>
       <div
-        v-if="highlightedCode"
-        class="json-highlighter w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto focus:ring-blue-500 focus:border-blue-500 cursor-text"
+        class="json-highlighter w-full h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto focus:ring-blue-500 focus:border-blue-500 cursor-text"
         tabindex="0"
+        data-clarity-mask="true"
         @click="startEditing"
         @keydown.enter="startEditing"
         v-html="highlightedCode"
       />
-      <div
-        v-else-if="code"
-        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto font-mono text-sm text-red-600 dark:text-red-400 whitespace-pre-wrap cursor-text"
-        @click="startEditing"
-      >
-        {{ code }}
-      </div>
-      <div
-        v-else
-        class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 font-mono text-sm cursor-text"
-        @click="startEditing"
-      >
-        {{ placeholder }}
-      </div>
     </div>
     <CopyButton :text="code" />
   </div>
@@ -59,10 +44,10 @@ const isEditing = ref(false)
 const textareaRef = ref<HTMLTextAreaElement>()
 const containerRef = ref<HTMLElement>()
 
-function onInput(event: Event) {
-  const target = event.target as HTMLTextAreaElement
-  emit('update:code', target.value)
-}
+const editableCode = computed({
+  get: () => props.code,
+  set: (value: string) => emit('update:code', value)
+})
 
 function onBlur(event: FocusEvent) {
   // Check if focus is moving to another element within THIS component
@@ -101,31 +86,24 @@ async function highlightCode(code: string) {
       theme
     })
     highlightedCode.value = html
-  } catch {
-    // If it's not valid JSON, show as plain text
-    highlightedCode.value = `<pre class="shiki"><code>${escapeHtml(code)}</code></pre>`
+  } catch (err) {
+    console.error(err)
+    // If it's not valid JSON, show as plain text with the same theme
+    const theme = colorMode.value === 'dark' ? 'github-dark' : 'github-light'
+    const html = await codeToHtml(code, {
+      lang: 'text',
+      theme
+    })
+    highlightedCode.value = html
   }
-}
-
-function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;")
 }
 
 watch(() => props.code, (newCode) => {
-  if (!isEditing.value) {
-    highlightCode(newCode)
-  }
+  highlightCode(newCode || props.placeholder)
 }, { immediate: true })
 
 watch(() => colorMode.value, () => {
-  if (!isEditing.value && props.code) {
-    highlightCode(props.code)
-  }
+  highlightCode(props.code || props.placeholder)
 })
 </script>
 
