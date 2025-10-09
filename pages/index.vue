@@ -121,17 +121,12 @@
             </div>
             <div v-else class="p-4" />
           </div>
-          <div class="relative">
-            <textarea
-              id="json-value"
-              v-model="jsonValue"
-              data-clarity-mask="true"
-              :placeholder="jsonPlaceHolderString"
-              class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
-              @input="jsonToCbor"
-            />
-            <CopyButton :text="jsonValue" />
-          </div>
+          <JsonHighlighter
+            :code="jsonValue"
+            :placeholder="jsonPlaceHolderString"
+            :editable="true"
+            @update:code="onJsonUpdate"
+          />
         </div>
       </section>
 
@@ -325,6 +320,11 @@ function jsonToCbor() {
   } catch (e) {
     cborValue.value = (e as Error).message
   }
+}
+
+function onJsonUpdate(newValue: string) {
+  jsonValue.value = newValue
+  jsonToCbor()
 }
 </script>
 
