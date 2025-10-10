@@ -102,6 +102,12 @@ watch(() => props.code, (newCode) => {
   highlightCode(newCode || props.placeholder)
 }, { immediate: true })
 
+watch(() => props.placeholder, (newPlaceholder) => {
+  if (!props.code) {
+    highlightCode(newPlaceholder)
+  }
+})
+
 watch(() => colorMode.value, () => {
   highlightCode(props.code || props.placeholder)
 })
