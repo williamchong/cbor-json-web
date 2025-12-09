@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { codeToHtml } from 'shiki'
+import { codeToHtml } from 'shiki/bundle/web'
 
 const props = defineProps<{
   code: string
