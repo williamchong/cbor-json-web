@@ -23,7 +23,7 @@
     "@nuxtjs/tailwindcss": "6.14.0",
     "@sentry/nuxt": "^9",
     "cbor-x": "^1.6.0",
-    "nuxt": "^3.17.5",
+    "nuxt": "^3.20.2",
     "nuxt-gtag": "^3.0.3",
     "shiki": "^3.13.0",
     "vue": "latest"
