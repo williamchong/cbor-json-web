@@ -40,25 +40,25 @@ export function valueToJsonString(
     bigintFormat?: BigintOutputFormat;
   } = {}
 ): string {
-  return JSON.stringify(value, (key, value) => {
-    if (typeof value === 'bigint') {
-      return bigintFormat === 'literal' ? `${value.toString()}n` : value.toString();
+  return JSON.stringify(value, (_key, val) => {
+    if (typeof val === 'bigint') {
+      return bigintFormat === 'literal' ? `${val.toString()}n` : val.toString();
     }
-    if ( isBufferObject(value)|| ArrayBuffer.isView(value)) {
-      const actualBuffer = value?.buffer || value;
+    if (isBufferObject(val) || ArrayBuffer.isView(val)) {
+      const actualBuffer = val?.buffer || val;
       switch (bufferFormat) {
         case 'base64':
           return Buffer.from(actualBuffer).toString('base64');
         case 'hex':
           return Buffer.from(actualBuffer).toString('hex');
         default:
-          return value;
+          return val;
       }
     }
-    if (convertSetToArray && value instanceof Set) {
-      return Array.from(value);
+    if (convertSetToArray && val instanceof Set) {
+      return Array.from(val);
     }
-    return value;
+    return val;
   }, 2)
 }
 

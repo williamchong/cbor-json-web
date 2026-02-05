@@ -341,10 +341,3 @@ function onJsonUpdate(newValue: string) {
   debouncedJsonToCbor()
 }
 </script>
-
-<style scoped>
-textarea {
-  width: 100%;
-  min-height: 300px;
-}
-</style>
