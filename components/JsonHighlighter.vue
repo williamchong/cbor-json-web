@@ -7,7 +7,6 @@
         v-model="editableCode"
         :placeholder="placeholder"
         class="w-full h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
-        data-clarity-mask="true"
         @blur="onBlur"
       />
     </div>
@@ -15,7 +14,6 @@
       <div
         class="json-highlighter w-full h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto focus:ring-blue-500 focus:border-blue-500 cursor-text"
         tabindex="0"
-        data-clarity-mask="true"
         @click="startEditing"
         @keydown.enter="startEditing"
         v-html="highlightedCode"

@@ -8,17 +8,8 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxtjs/sitemap',
     '@sentry/nuxt/module',
-    '@nuxt/scripts',
     '@nuxtjs/color-mode',
   ],
-
-  scripts: {
-    registry: {
-      clarity: {
-        id: 'tkugyjvqz5'
-      }
-    }
-  },
 
   gtag: {
     id: 'G-PG6KXFFZPF',
