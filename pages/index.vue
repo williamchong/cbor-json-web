@@ -47,7 +47,7 @@
               data-clarity-mask="true"
               :placeholder="cborPlaceHolder"
               class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none"
-              @input="cborToJson"
+              @input="debouncedCborToJson"
             />
             <CopyButton :text="cborValue" />
           </div>
@@ -229,6 +229,17 @@ const fileInput = ref<HTMLInputElement>()
 
 const { trackEvent } = useAnalytics()
 
+let convertTimer: ReturnType<typeof setTimeout> | undefined
+function debouncedCborToJson() {
+  clearTimeout(convertTimer)
+  convertTimer = setTimeout(() => cborToJson(), 200)
+}
+function debouncedJsonToCbor() {
+  clearTimeout(convertTimer)
+  convertTimer = setTimeout(() => jsonToCbor(), 200)
+}
+onUnmounted(() => clearTimeout(convertTimer))
+
 watch(cborEncoding, () => {
   if (isJsonInput.value) {
     jsonToCbor()
@@ -327,7 +338,7 @@ function jsonToCbor() {
 
 function onJsonUpdate(newValue: string) {
   jsonValue.value = newValue
-  jsonToCbor()
+  debouncedJsonToCbor()
 }
 </script>
 

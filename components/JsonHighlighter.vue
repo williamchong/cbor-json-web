@@ -49,6 +49,12 @@ const editableCode = computed({
   set: (value: string) => emit('update:code', value)
 })
 
+let highlightTimer: ReturnType<typeof setTimeout> | undefined
+function debouncedHighlightCode(code: string, delay = 150) {
+  clearTimeout(highlightTimer)
+  highlightTimer = setTimeout(() => highlightCode(code), delay)
+}
+
 function onBlur(event: FocusEvent) {
   // Check if focus is moving to another element within THIS component
   const relatedTarget = event.relatedTarget as HTMLElement
@@ -99,18 +105,20 @@ async function highlightCode(code: string) {
 }
 
 watch(() => props.code, (newCode) => {
-  highlightCode(newCode || props.placeholder)
+  debouncedHighlightCode(newCode || props.placeholder)
 }, { immediate: true })
 
 watch(() => props.placeholder, (newPlaceholder) => {
   if (!props.code) {
-    highlightCode(newPlaceholder)
+    debouncedHighlightCode(newPlaceholder)
   }
 })
 
 watch(() => colorMode.value, () => {
   highlightCode(props.code || props.placeholder)
 })
+
+onUnmounted(() => clearTimeout(highlightTimer))
 </script>
 
 <style scoped>
