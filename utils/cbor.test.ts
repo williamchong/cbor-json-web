@@ -11,6 +11,10 @@ describe('CBOR Utils', () => {
     it('should return false for invalid base64 strings', () => {
       expect(isBase64('not-base64!')).toBe(false)
     })
+
+    it('should return false for empty string', () => {
+      expect(isBase64('')).toBe(false)
+    })
   })
 
   describe('isHex', () => {
