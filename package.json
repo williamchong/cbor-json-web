@@ -21,6 +21,7 @@
     "@nuxtjs/sitemap": "7.4.1",
     "@nuxtjs/tailwindcss": "6.14.0",
     "@sentry/nuxt": "^9",
+    "@vueuse/core": "^14.2.1",
     "cbor-x": "^1.6.0",
     "nuxt": "^3.20.2",
     "nuxt-gtag": "^3.0.3",

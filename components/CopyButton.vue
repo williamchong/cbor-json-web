@@ -19,21 +19,19 @@
 </template>
 
 <script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
+
 const { t } = useI18n()
 
 const props = defineProps<{
   text: string
 }>()
 
-const copied = ref(false)
+const { copy, copied } = useClipboard({ copiedDuring: 2000 })
 const { trackEvent } = useAnalytics()
 
 async function copyText() {
-  await navigator.clipboard.writeText(props.text)
+  await copy(props.text)
   trackEvent('copy')
-  copied.value = true
-  setTimeout(() => {
-    copied.value = false
-  }, 2000)
 }
 </script>
