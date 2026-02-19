@@ -25,19 +25,13 @@
                 class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                 :title="$t('cbor.uploadFile')"
                 :alt="$t('cbor.uploadFile')"
-                @click="fileInput?.click()"
+                @click="openFileDialog()"
               >
                 <Icon
                   name="material-symbols:upload-file"
                   class="w-4 h-4 text-gray-700 dark:text-gray-300"
                 />
               </button>
-              <input
-                ref="fileInput"
-                type="file"
-                class="hidden"
-                @change="handleFileUpload"
-              >
             </div>
           </div>
           <div class="relative">
@@ -54,7 +48,7 @@
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2 mx-2">
             <label for="json-value" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('json.label') }}</label>
-            <div v-if="!isJsonInput" class="flex items-center gap-4 relative">
+            <div v-if="!isJsonInput" ref="settingsRef" class="flex items-center gap-4 relative">
               <div class="flex items-center gap-2">
                 <label for="buffer-format" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('json.bufferFormat') }}</label>
                 <select
@@ -198,6 +192,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn, onClickOutside, useFileDialog } from '@vueuse/core'
 import { encode } from 'cbor-x'
 import { Buffer } from 'node:buffer'
 import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputFormat, type BigintOutputFormat } from '~/utils/cbor'
@@ -224,20 +219,28 @@ const bigintFormat = ref<BigintOutputFormat>('string')
 const isJsonInput = ref(false)
 const convertSetToArray = ref(true)
 const isSettingsOpen = ref(false)
-const fileInput = ref<HTMLInputElement>()
+const settingsRef = ref<HTMLElement>()
 
 const { trackEvent } = useAnalytics()
 
-let convertTimer: ReturnType<typeof setTimeout> | undefined
-function debouncedCborToJson() {
-  clearTimeout(convertTimer)
-  convertTimer = setTimeout(() => cborToJson(), 200)
-}
-function debouncedJsonToCbor() {
-  clearTimeout(convertTimer)
-  convertTimer = setTimeout(() => jsonToCbor(), 200)
-}
-onUnmounted(() => clearTimeout(convertTimer))
+onClickOutside(settingsRef, () => { isSettingsOpen.value = false })
+
+const { open: openFileDialog, onChange: onFileChange } = useFileDialog({ multiple: false, reset: true })
+onFileChange(async (files) => {
+  if (!files?.length) return
+  trackEvent('select_file')
+  try {
+    const arrayBuffer = await files[0].arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    cborValue.value = buffer.toString(cborEncoding.value)
+    cborToJson()
+  } catch (e) {
+    jsonValue.value = (e as Error).message
+  }
+})
+
+const debouncedCborToJson = useDebounceFn(() => cborToJson(), 200)
+const debouncedJsonToCbor = useDebounceFn(() => jsonToCbor(), 200)
 
 watch(cborEncoding, () => {
   if (isJsonInput.value) {
@@ -281,25 +284,6 @@ function onToggleBigintSettings() {
     format: bigintFormat.value
   })
   cborToJson()
-}
-
-async function handleFileUpload(event: Event) {
-  trackEvent('select_file')
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file) return
-
-  try {
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-    cborValue.value = buffer.toString(cborEncoding.value)
-    cborToJson()
-  } catch (e) {
-    jsonValue.value = (e as Error).message
-  }
-
-  if (fileInput.value) {
-    fileInput.value.value = ''
-  }
 }
 
 function cborToJson() {

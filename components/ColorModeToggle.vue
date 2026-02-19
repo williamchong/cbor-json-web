@@ -13,27 +13,28 @@
 </template>
 
 <script setup lang="ts">
+import { useCycleList } from '@vueuse/core'
+
 const colorMode = useColorMode()
 const { trackEvent } = useAnalytics()
 
-const iconName = computed(() => {
-  const icons = {
-    light: 'material-symbols:light-mode-outline',
-    dark: 'material-symbols:dark-mode-outline',
-    system: 'material-symbols:computer-outline'
-  }
-  return icons[colorMode.preference as keyof typeof icons] || icons.system
+const modes = ['system', 'light', 'dark'] as const
+const { next: nextMode } = useCycleList([...modes], {
+  initialValue: colorMode.preference as typeof modes[number],
 })
 
-function toggleColorMode() {
-  const modes = ['system', 'light', 'dark'] as const
-  const currentIndex = modes.indexOf(colorMode.preference as typeof modes[number])
-  const nextIndex = (currentIndex + 1) % modes.length
-  const newMode = modes[nextIndex]
+const icons: Record<string, string> = {
+  light: 'material-symbols:light-mode-outline',
+  dark: 'material-symbols:dark-mode-outline',
+  system: 'material-symbols:computer-outline',
+}
+const iconName = computed(() => icons[colorMode.preference] || icons.system)
 
+function toggleColorMode() {
+  const newMode = nextMode()
   colorMode.preference = newMode
   trackEvent('toggle_color_mode', {
-    mode: newMode
+    mode: newMode,
   })
 }
 </script>

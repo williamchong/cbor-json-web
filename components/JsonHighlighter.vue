@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import { codeToHtml } from 'shiki/bundle/web'
 
 const props = defineProps<{
@@ -47,11 +48,7 @@ const editableCode = computed({
   set: (value: string) => emit('update:code', value)
 })
 
-let highlightTimer: ReturnType<typeof setTimeout> | undefined
-function debouncedHighlightCode(code: string, delay = 150) {
-  clearTimeout(highlightTimer)
-  highlightTimer = setTimeout(() => highlightCode(code), delay)
-}
+const debouncedHighlightCode = useDebounceFn((code: string) => highlightCode(code), 150)
 
 function onBlur(event: FocusEvent) {
   // Check if focus is moving to another element within THIS component
@@ -115,8 +112,6 @@ watch(() => props.placeholder, (newPlaceholder) => {
 watch(() => colorMode.value, () => {
   highlightCode(props.code || props.placeholder)
 })
-
-onUnmounted(() => clearTimeout(highlightTimer))
 </script>
 
 <style scoped>
