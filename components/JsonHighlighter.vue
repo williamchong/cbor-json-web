@@ -101,7 +101,11 @@ async function highlightCode(code: string) {
 
 watch(() => props.code, (newCode) => {
   debouncedHighlightCode(newCode || props.placeholder)
-}, { immediate: true })
+})
+
+onMounted(() => {
+  highlightCode(props.code || props.placeholder)
+})
 
 watch(() => props.placeholder, (newPlaceholder) => {
   if (!props.code) {
