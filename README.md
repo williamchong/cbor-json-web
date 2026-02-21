@@ -1,39 +1,17 @@
 # CBOR to JSON Online Converter
 
-This tool is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation). It allows you to convert data between CBOR and JSON formats.
+Online converter between CBOR (Concise Binary Object Representation) and JSON formats. Built with Nuxt 3, deployed to GitHub Pages.
 
-## Setup
-
-Make sure to install the dependencies:
+## Development
 
 ```bash
-# yarn
-yarn install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# yarn
-yarn preview
+yarn install          # Install dependencies
+yarn dev              # Dev server at http://localhost:3000
+yarn build            # Production build
+yarn preview          # Preview production build locally
+yarn test             # Run tests (Vitest)
+yarn lint             # ESLint
+yarn typecheck        # Type checking via vue-tsc
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
