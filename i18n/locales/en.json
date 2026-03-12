@@ -1,6 +1,6 @@
 {
   "title": "CBOR to JSON Online Converter",
-  "subtitle": "Convert CBOR from/to JSON string",
+  "subtitle": "Decode and inspect CBOR payloads as readable JSON — instantly",
   "cbor": {
     "label": "CBOR",
     "encoding": "Encoding",
@@ -35,7 +35,7 @@
     "whatIs": {
       "title": "What is this tool?",
       "content": [
-        "This website is an online converter for CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation). It allows you to encode and decode data in CBOR and JSON formats.",
+        "Debugging WebAuthn responses, IoT sensor data, or COSE security tokens? Paste CBOR data (base64 or hex) and get formatted JSON instantly.",
         "To get started, just paste your CBOR value (in base64 or hex) or a JSON string into the respective input field above."
       ]
     },
@@ -43,31 +43,18 @@
       "title": "What is CBOR?",
       "content": [
         "CBOR (Concise Binary Object Representation) is a binary data format that aims to be smaller and more efficient than JSON. It provides a compact binary representation of structured data, making it useful for scenarios where size and performance are important.",
+        "You'll commonly encounter CBOR in WebAuthn/FIDO2 attestation objects, IoT device communication (CoAP, MQTT), and COSE security tokens.",
         "For more information, you can visit the {0}."
       ],
       "link": "CBOR website"
     },
-    "bufferHandling": {
-      "title": "Buffer Handling",
-      "content": ["When converting from JSON to CBOR, if a stringified Buffer object is detected in the JSON (e.g. \"type\":\"Buffer\",\"data\":[1,2,3]), it will be automatically converted back to a Buffer in the CBOR output."]
-    },
-    "arrayBuffer": {
-      "title": "ArrayBuffer Display Options",
-      "content": [
-        "ArrayBufferLike values in CBOR cannot be directly stringified to JSON. To handle this, you can choose how to display buffer-like values when converting from CBOR to JSON using the \"Buffer Format\" dropdown:",
-        "Note that these display options only affect CBOR to JSON conversion. When converting from JSON to CBOR, buffer-like values need to be properly formatted as Buffer objects."
-      ],
-      "options": {
-        "none": "none: Keep as is",
-        "base64": "base64: Convert to base64 string",
-        "hex": "hex: Convert to hexadecimal string"
-      }
-    },
-    "setSupport": {
-      "title": "Set Support",
-      "content": [
-        "CBOR supports Set data structures, but these cannot be directly stringified to JSON. By default, Sets are automatically converted to Arrays when converting from CBOR to JSON.",
-        "You can toggle this behavior in the settings menu (gear icon) next to the Buffer Format selector. When disabled, Sets will be preserved as objects with their original type information."
+    "advancedFeatures": {
+      "title": "Advanced Features",
+      "content": "This tool handles CBOR data types that don't have direct JSON equivalents:",
+      "items": [
+        "Buffer Handling — Stringified Buffer objects in JSON are automatically reconstructed when converting to CBOR.",
+        "ArrayBuffer Display — Choose how to display binary data in JSON output: keep as-is, convert to base64, or convert to hex using the \"Buffer Format\" dropdown.",
+        "Set Support — CBOR Sets are converted to Arrays by default. Toggle this in the settings menu (gear icon) to preserve original type information."
       ]
     },
     "source": {
@@ -84,9 +71,7 @@
   "layout": {
     "meta": {
       "title": "CBOR to JSON Online Converter",
-      "description": "Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder.",
-      "ogTitle": "CBOR to JSON Online Converter",
-      "ogDescription": "Easily convert data between CBOR (Concise Binary Object Representation) and JSON (JavaScript Object Notation) formats with this online web decoder."
+      "description": "Online CBOR to JSON converter for debugging WebAuthn, IoT, and COSE payloads. Supports base64/hex encoding, BigInt, Buffer, and Set. Paste and convert instantly."
     }
   },
   "components": {

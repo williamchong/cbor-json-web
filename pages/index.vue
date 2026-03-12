@@ -138,7 +138,7 @@
           <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
           <div class="space-y-4 text-gray-600 dark:text-gray-400">
             <p v-for="(text, index) in $tm('sections.whatIsCbor.content')" :key="index">
-              <i18n-t v-if="index === 1" :keypath="'sections.whatIsCbor.content.' + index" tag="span">
+              <i18n-t v-if="$rt(text).includes('{0}')" :keypath="'sections.whatIsCbor.content.' + index" tag="span">
                 <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                   {{ $t('sections.whatIsCbor.link') }}
                 </a>
@@ -149,23 +149,12 @@
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.bufferHandling.title') }}</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.advancedFeatures.title') }}</h2>
           <div class="space-y-4 text-gray-600 dark:text-gray-400">
-            <p v-for="(text, index) in $tm('sections.bufferHandling.content')" :key="index">{{ $rt(text) }}</p>
-          </div>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.arrayBuffer.title') }}</h2>
-          <div class="space-y-4 text-gray-600 dark:text-gray-400">
-            <p v-for="(text, index) in $tm('sections.arrayBuffer.content')" :key="index">{{ $rt(text) }}</p>
-          </div>
-        </section>
-
-        <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.setSupport.title') }}</h2>
-          <div class="space-y-4 text-gray-600 dark:text-gray-400">
-            <p v-for="(text, index) in $tm('sections.setSupport.content')" :key="index">{{ $rt(text) }}</p>
+            <p>{{ $t('sections.advancedFeatures.content') }}</p>
+            <ul class="list-disc list-inside space-y-2">
+              <li v-for="(item, index) in $tm('sections.advancedFeatures.items')" :key="index">{{ $rt(item) }}</li>
+            </ul>
           </div>
         </section>
 
