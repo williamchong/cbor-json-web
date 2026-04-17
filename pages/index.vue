@@ -171,7 +171,7 @@
           <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.about.title') }}</h2>
           <p class="text-gray-600 dark:text-gray-400">
             <i18n-t keypath="sections.about.content">
-              <a href="https://blog.williamchong.cloud" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{{ $t('sections.about.link') }}</a>
+              <a href="https://blog.williamchong.cloud?utm_source=cbor.williamchong.cloud&utm_medium=referral&utm_campaign=about" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{{ $t('sections.about.link') }}</a>
             </i18n-t>
           </p>
         </section>
