@@ -956,6 +956,13 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.3.tgz#c2b9d2e374ee62c586d3adbea87199b1d7a7a6ba"
   integrity sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==
 
+"@iconify-json/material-symbols@^1.2.74":
+  version "1.2.74"
+  resolved "https://registry.yarnpkg.com/@iconify-json/material-symbols/-/material-symbols-1.2.74.tgz#8d603493ee32f6c114099278c0f543c752ae29de"
+  integrity sha512-GKJcvvm8A25pkh3Z2M430olvP4hDpDKg2sg7cpVnesM4bT7rExH74ThtRLWjdB86qhkxT3XrMuHRJa8LFCRmSw==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify/collections@^1.0.560":
   version "1.0.688"
   resolved "https://registry.yarnpkg.com/@iconify/collections/-/collections-1.0.688.tgz#2c8f1d8a64e8ca8647a57ff9a3c6195871566b2d"
