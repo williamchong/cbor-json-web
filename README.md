@@ -1,6 +1,6 @@
 # CBOR to JSON Online Converter
 
-Online converter between CBOR (Concise Binary Object Representation) and JSON formats. Built with Nuxt 3, deployed to GitHub Pages.
+Online converter between CBOR (Concise Binary Object Representation) and JSON formats. Built with Nuxt 4, deployed to GitHub Pages.
 
 ## Development
 

@@ -23,12 +23,12 @@ const { next: nextMode } = useCycleList([...modes], {
   initialValue: colorMode.preference as typeof modes[number],
 })
 
-const icons: Record<string, string> = {
+const icons = {
   light: 'material-symbols:light-mode-outline',
   dark: 'material-symbols:dark-mode-outline',
   system: 'material-symbols:computer-outline',
-}
-const iconName = computed(() => icons[colorMode.preference] || icons.system)
+} as const
+const iconName = computed(() => icons[colorMode.preference as keyof typeof icons] ?? icons.system)
 
 function toggleColorMode() {
   const newMode = nextMode()

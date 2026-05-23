@@ -6,18 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 See `README.md` for standard commands (`yarn dev`, `yarn build`, `yarn test`, `yarn lint`, `yarn typecheck`).
 
-Run a single test file: `npx vitest run utils/cbor.test.ts`
+Run a single test file: `npx vitest run app/utils/cbor.test.ts`
 
 ## Architecture
 
+### Source Layout
+
+This is a Nuxt 4 project using the `app/` source directory: Vue app code lives in `app/` (`app/pages/`, `app/components/`, `app/composables/`, `app/layouts/`, `app/utils/`). `i18n/`, `server/`, `public/`, the Sentry config files, and `nuxt.config.ts` stay at the project root.
+
 ### Data Flow
 
-The app is a single-page dual-pane converter (`pages/index.vue`). User edits CBOR (left pane) or JSON (right pane), and the other pane updates via debounced conversion. The `isJsonInput` ref tracks which direction the conversion flows.
+The app is a single-page dual-pane converter (`app/pages/index.vue`). User edits CBOR (left pane) or JSON (right pane), and the other pane updates via debounced conversion. The `isJsonInput` ref tracks which direction the conversion flows.
 
 - **CBOR input**: auto-detects encoding (base64 vs hex) using `isBase64()`/`isHex()`, then calls `cborToJsonString()`
 - **JSON input**: calls `jsonStringToCbor()` which parses JSON (reviving BigInt literals like `"123n"` and Buffer objects) then encodes to CBOR
 
-### Core Module: `utils/cbor.ts`
+### Core Module: `app/utils/cbor.ts`
 
 All conversion logic lives here. Key design decisions:
 - BigInt values can't natively serialize to JSON — supported as either plain strings (`"123"`) or literal format (`"123n"`) controlled by `bigintFormat` option

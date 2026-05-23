@@ -216,10 +216,11 @@ onClickOutside(settingsRef, () => { isSettingsOpen.value = false })
 
 const { open: openFileDialog, onChange: onFileChange } = useFileDialog({ multiple: false, reset: true })
 onFileChange(async (files) => {
-  if (!files?.length) return
+  const file = files?.[0]
+  if (!file) return
   trackEvent('select_file')
   try {
-    const arrayBuffer = await files[0].arrayBuffer()
+    const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     cborValue.value = buffer.toString(cborEncoding.value)
     cborToJson()
