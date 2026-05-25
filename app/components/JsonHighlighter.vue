@@ -2,17 +2,19 @@
 <template>
   <div ref="containerRef" class="relative">
     <div v-if="isEditing" class="relative">
-      <textarea
-        ref="textareaRef"
+      <UTextarea
+        ref="textareaComp"
         v-model="editableCode"
         :placeholder="placeholder"
-        class="w-full h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+        :rows="12"
+        class="w-full"
+        :ui="{ base: 'h-[300px] resize-none font-mono text-sm' }"
         @blur="onBlur"
       />
     </div>
     <div v-else>
       <div
-        class="json-highlighter w-full h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-auto focus:ring-blue-500 focus:border-blue-500 cursor-text"
+        class="json-highlighter w-full h-[300px] p-3 rounded-md border border-default bg-default overflow-auto cursor-text focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         tabindex="0"
         @click="startEditing"
         @keydown.enter="startEditing"
@@ -40,7 +42,7 @@ const emit = defineEmits<{
 const colorMode = useColorMode()
 const highlightedCode = ref<string>('')
 const isEditing = ref(false)
-const textareaRef = ref<HTMLTextAreaElement>()
+const textareaComp = ref<{ textareaRef?: HTMLTextAreaElement }>()
 const containerRef = ref<HTMLElement>()
 
 const editableCode = computed({
@@ -67,7 +69,7 @@ function startEditing() {
   if (!props.editable) return
   isEditing.value = true
   nextTick(() => {
-    textareaRef.value?.focus()
+    textareaComp.value?.textareaRef?.focus()
   })
 }
 
@@ -132,10 +134,5 @@ watch(() => colorMode.value, () => {
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-textarea {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.875rem;
 }
 </style>

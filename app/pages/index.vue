@@ -1,119 +1,96 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-8 transition-colors">
+  <div class="min-h-screen bg-muted p-4 md:p-8 transition-colors">
     <div class="max-w-6xl mx-auto">
       <div class="flex justify-between items-center mb-2">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">{{ $t('title') }}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-highlighted">{{ $t('title') }}</h1>
         <ClientOnly><ColorModeToggle /></ClientOnly>
       </div>
-      <p class="text-gray-600 dark:text-gray-400 mb-8">{{ $t('subtitle') }}</p>
+      <p class="text-muted mb-8">{{ $t('subtitle') }}</p>
 
       <section class="flex flex-col md:flex-row gap-6 mb-12">
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2">
-            <label for="cbor-value" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('cbor.label') }}</label>
+            <label for="cbor-value" class="text-sm font-medium text-default">{{ $t('cbor.label') }}</label>
             <div class="flex items-center gap-4 mx-2">
-              <label for="cbor-encoding" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('cbor.encoding') }}</label>
-              <select
+              <label for="cbor-encoding" class="text-sm font-medium text-default">{{ $t('cbor.encoding') }}</label>
+              <USelect
                 id="cbor-encoding"
-                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500"
-                @change="onEncodingChange"
-              >
-                <option value="base64">{{ $t('cbor.encodingOptions.base64') }}</option>
-                <option value="hex">{{ $t('cbor.encodingOptions.hex') }}</option>
-              </select>
-              <button
-                class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                :model-value="cborEncoding"
+                :items="encodingItems"
+                size="sm"
+                :aria-label="$t('cbor.encoding')"
+                @update:model-value="onEncodingChange"
+              />
+              <UButton
+                color="neutral"
+                variant="ghost"
+                size="sm"
+                icon="i-lucide-file-up"
                 :title="$t('cbor.uploadFile')"
-                :alt="$t('cbor.uploadFile')"
+                :aria-label="$t('cbor.uploadFile')"
                 @click="openFileDialog()"
-              >
-                <Icon
-                  name="material-symbols:upload-file"
-                  class="w-4 h-4 text-gray-700 dark:text-gray-300"
-                />
-              </button>
+              />
             </div>
           </div>
           <div class="relative">
-            <textarea
+            <UTextarea
               id="cbor-value"
               v-model="cborValue"
               :placeholder="cborPlaceHolder"
-              class="w-full min-h-[300px] p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 resize-none"
-              @input="debouncedCborToJson"
+              :rows="12"
+              class="w-full"
+              :ui="{ base: 'min-h-[300px] resize-none' }"
+              @update:model-value="debouncedCborToJson"
             />
             <CopyButton :text="cborValue" />
           </div>
         </div>
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2 mx-2">
-            <label for="json-value" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('json.label') }}</label>
-            <div v-if="!isJsonInput" ref="settingsRef" class="flex items-center gap-4 relative">
+            <label for="json-value" class="text-sm font-medium text-default">{{ $t('json.label') }}</label>
+            <div v-if="!isJsonInput" class="flex items-center gap-4">
               <div class="flex items-center gap-2">
-                <label for="buffer-format" class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('json.bufferFormat') }}</label>
-                <select
+                <label for="buffer-format" class="text-sm font-medium text-default">{{ $t('json.bufferFormat') }}</label>
+                <USelect
                   id="buffer-format"
-                  class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm focus:ring-blue-500 focus:border-blue-500"
-                  @change="onBufferFormatChange"
-                >
-                  <option value="none">{{ $t('json.formatOptions.none') }}</option>
-                  <option value="base64">{{ $t('json.formatOptions.base64') }}</option>
-                  <option value="hex">{{ $t('json.formatOptions.hex') }}</option>
-                </select>
-              </div>
-              <button
-                class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                :title="$t('settings.title')"
-                :alt="$t('settings.title')"
-                @click="onClickSettings"
-              >
-                <Icon
-                  name="material-symbols:settings"
-                  class="w-4 h-4 text-gray-700 dark:text-gray-300"
+                  :model-value="bufferFormat"
+                  :items="bufferFormatItems"
+                  size="sm"
+                  :aria-label="$t('json.bufferFormat')"
+                  @update:model-value="onBufferFormatChange"
                 />
-              </button>
-              <div
-                v-show="isSettingsOpen"
-                class="absolute right-0 top-full mt-2 w-64 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10"
-              >
-                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{{ $t('settings.title') }}</h3>
-                <div class="space-y-3">
-                  <label class="flex items-center gap-2">
-                    <input
-                      v-model="convertSetToArray"
-                      type="checkbox"
-                      class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
-                      @change="onToggleSetSettings"
-                    >
-                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('settings.setToArray') }}</span>
-                  </label>
-                  <div class="space-y-1">
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('settings.bigintFormat.label') }}</label>
-                    <div class="space-y-2">
-                      <label class="flex items-center gap-2">
-                        <input
-                          v-model="bigintFormat"
-                          type="radio"
-                          value="string"
-                          class="text-blue-600 focus:ring-blue-500"
-                          @change="onToggleBigintSettings"
-                        >
-                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('settings.bigintFormat.string') }}</span>
-                      </label>
-                      <label class="flex items-center gap-2">
-                        <input
-                          v-model="bigintFormat"
-                          type="radio"
-                          value="literal"
-                          class="text-blue-600 focus:ring-blue-500"
-                          @change="onToggleBigintSettings"
-                        >
-                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('settings.bigintFormat.literal') }}</span>
-                      </label>
+              </div>
+              <UPopover>
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  size="sm"
+                  icon="i-lucide-settings"
+                  :title="$t('settings.title')"
+                  :aria-label="$t('settings.title')"
+                  @click="onToggleSettings"
+                />
+                <template #content>
+                  <div class="w-64 p-4">
+                    <h3 class="text-sm font-medium text-default mb-3">{{ $t('settings.title') }}</h3>
+                    <div class="space-y-3">
+                      <UCheckbox
+                        :model-value="convertSetToArray"
+                        :label="$t('settings.setToArray')"
+                        @update:model-value="onToggleSetSettings"
+                      />
+                      <div class="space-y-1">
+                        <p class="text-sm font-medium text-default">{{ $t('settings.bigintFormat.label') }}</p>
+                        <URadioGroup
+                          :model-value="bigintFormat"
+                          :items="bigintItems"
+                          @update:model-value="onToggleBigintSettings"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </template>
+              </UPopover>
             </div>
             <div v-else class="p-4" />
           </div>
@@ -128,18 +105,18 @@
 
       <div class="space-y-8">
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.whatIs.title') }}</h2>
-          <div class="space-y-4 text-gray-600 dark:text-gray-400">
+          <h2 class="text-2xl font-semibold text-highlighted mb-4">{{ $t('sections.whatIs.title') }}</h2>
+          <div class="space-y-4 text-muted">
             <p v-for="(text, index) in $tm('sections.whatIs.content')" :key="index">{{ $rt(text) }}</p>
           </div>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
-          <div class="space-y-4 text-gray-600 dark:text-gray-400">
+          <h2 class="text-2xl font-semibold text-highlighted mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
+          <div class="space-y-4 text-muted">
             <p v-for="(text, index) in $tm('sections.whatIsCbor.content')" :key="index">
               <i18n-t v-if="$rt(text).includes('{0}')" :keypath="'sections.whatIsCbor.content.' + index" tag="span">
-                <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                   {{ $t('sections.whatIsCbor.link') }}
                 </a>
               </i18n-t>
@@ -149,8 +126,8 @@
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.advancedFeatures.title') }}</h2>
-          <div class="space-y-4 text-gray-600 dark:text-gray-400">
+          <h2 class="text-2xl font-semibold text-highlighted mb-4">{{ $t('sections.advancedFeatures.title') }}</h2>
+          <div class="space-y-4 text-muted">
             <p>{{ $t('sections.advancedFeatures.content') }}</p>
             <ul class="list-disc list-inside space-y-2">
               <li v-for="(item, index) in $tm('sections.advancedFeatures.items')" :key="index">{{ $rt(item) }}</li>
@@ -159,19 +136,19 @@
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.source.title') }}</h2>
-          <p class="text-gray-600 dark:text-gray-400">
+          <h2 class="text-2xl font-semibold text-highlighted mb-4">{{ $t('sections.source.title') }}</h2>
+          <p class="text-muted">
             <i18n-t keypath="sections.source.content">
-              <a href="https://github.com/williamchong/cbor-json-web" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{{ $t('sections.source.link') }}</a>
+              <a href="https://github.com/williamchong/cbor-json-web" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">{{ $t('sections.source.link') }}</a>
             </i18n-t>
           </p>
         </section>
 
         <section>
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $t('sections.about.title') }}</h2>
-          <p class="text-gray-600 dark:text-gray-400">
+          <h2 class="text-2xl font-semibold text-highlighted mb-4">{{ $t('sections.about.title') }}</h2>
+          <p class="text-muted">
             <i18n-t keypath="sections.about.content">
-              <a href="https://blog.williamchong.cloud?utm_source=cbor.williamchong.cloud&utm_medium=referral&utm_campaign=about" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{{ $t('sections.about.link') }}</a>
+              <a href="https://blog.williamchong.cloud?utm_source=cbor.williamchong.cloud&utm_medium=referral&utm_campaign=about" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">{{ $t('sections.about.link') }}</a>
             </i18n-t>
           </p>
         </section>
@@ -181,10 +158,12 @@
 </template>
 
 <script setup lang="ts">
-import { useDebounceFn, onClickOutside, useFileDialog } from '@vueuse/core'
+import { useDebounceFn, useFileDialog } from '@vueuse/core'
 import { encode } from 'cbor-x'
 import { Buffer } from 'node:buffer'
 import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputFormat, type BigintOutputFormat } from '~/utils/cbor'
+
+const { t } = useI18n()
 
 const cborValue = ref('')
 const jsonValue = ref('')
@@ -207,12 +186,22 @@ const bufferFormat = ref<BufferOutputFormat>('none')
 const bigintFormat = ref<BigintOutputFormat>('string')
 const isJsonInput = ref(false)
 const convertSetToArray = ref(true)
-const isSettingsOpen = ref(false)
-const settingsRef = ref<HTMLElement>()
+
+const encodingItems = computed(() => [
+  { label: t('cbor.encodingOptions.base64'), value: 'base64' as BufferEncoding },
+  { label: t('cbor.encodingOptions.hex'), value: 'hex' as BufferEncoding }
+])
+const bufferFormatItems = computed(() => [
+  { label: t('json.formatOptions.none'), value: 'none' as BufferOutputFormat },
+  { label: t('json.formatOptions.base64'), value: 'base64' as BufferOutputFormat },
+  { label: t('json.formatOptions.hex'), value: 'hex' as BufferOutputFormat }
+])
+const bigintItems = computed(() => [
+  { label: t('settings.bigintFormat.string'), value: 'string' as BigintOutputFormat },
+  { label: t('settings.bigintFormat.literal'), value: 'literal' as BigintOutputFormat }
+])
 
 const { trackEvent } = useAnalytics()
-
-onClickOutside(settingsRef, () => { isSettingsOpen.value = false })
 
 const { open: openFileDialog, onChange: onFileChange } = useFileDialog({ multiple: false, reset: true })
 onFileChange(async (files) => {
@@ -245,33 +234,34 @@ watch(bufferFormat, () => {
   cborToJson()
 })
 
-function onEncodingChange(e: Event) {
-  cborEncoding.value = (e.target as HTMLSelectElement).value as BufferEncoding
+function onEncodingChange(value: BufferEncoding) {
+  cborEncoding.value = value
   trackEvent('toggle_cbor_encoding', {
-    encoding: cborEncoding.value
+    encoding: value
   })
 }
 
-function onBufferFormatChange(e: Event) {
-  bufferFormat.value = (e.target as HTMLSelectElement).value as BufferOutputFormat
+function onBufferFormatChange(value: BufferOutputFormat) {
+  bufferFormat.value = value
   trackEvent('toggle_buffer_format', {
-    format: bufferFormat.value
+    format: value
   })
 }
 
-function onClickSettings() {
+function onToggleSettings() {
   trackEvent('toggle_settings')
-  isSettingsOpen.value = !isSettingsOpen.value
 }
 
-function onToggleSetSettings() {
+function onToggleSetSettings(value: boolean | 'indeterminate') {
+  convertSetToArray.value = value === true
   trackEvent('toggle_settings_set_conversion')
   cborToJson()
 }
 
-function onToggleBigintSettings() {
+function onToggleBigintSettings(value: BigintOutputFormat) {
+  bigintFormat.value = value
   trackEvent('toggle_settings_bigint_format', {
-    format: bigintFormat.value
+    format: value
   })
   cborToJson()
 }

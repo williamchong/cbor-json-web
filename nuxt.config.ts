@@ -1,15 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
+    '@nuxt/ui',
     'nuxt-gtag',
     '@nuxtjs/i18n',
-    '@nuxtjs/tailwindcss',
     '@nuxt/eslint',
-    '@nuxt/icon',
     '@nuxtjs/sitemap',
     '@sentry/nuxt/module',
-    '@nuxtjs/color-mode',
   ],
+
+  // Nuxt UI bundles @nuxt/icon, @nuxtjs/color-mode and @nuxt/fonts, so those
+  // are no longer registered as standalone modules above.
+  css: ['~/assets/css/main.css'],
 
   gtag: {
     id: 'G-PG6KXFFZPF',
@@ -55,6 +57,20 @@ export default defineNuxtConfig({
     // client instead so they resolve offline without API fallback.
     clientBundle: {
       scan: true,
+      // `scan` only covers our own source, so Nuxt UI's internal component
+      // icons (USelect chevron, UCheckbox tick) and the icons we pass via
+      // component props are listed explicitly to guarantee they bundle.
+      icons: [
+        'lucide:chevron-down',
+        'lucide:check',
+        'lucide:copy',
+        'lucide:circle-check',
+        'lucide:sun',
+        'lucide:moon',
+        'lucide:monitor',
+        'lucide:settings',
+        'lucide:file-up',
+      ],
     },
   },
 

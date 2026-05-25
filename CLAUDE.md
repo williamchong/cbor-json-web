@@ -29,17 +29,22 @@ All conversion logic lives here. Key design decisions:
 - `jsonStringToCbor()` uses a JSON reviver to reconstruct BigInt and Buffer from their string representations
 - Sets serialize as `{}` by default in JSON; `convertSetToArray` option converts them to arrays instead
 
+### UI Framework
+
+Built on **Nuxt UI v4** (`@nuxt/ui`) + **Tailwind CSS v4** (CSS-first config in `app/assets/css/main.css`). `@nuxt/ui` bundles `@nuxt/icon`, `@nuxtjs/color-mode`, and `@nuxt/fonts`, so those are not registered as standalone modules. The root is wrapped in `<UApp>` (`app/app.vue`); theme colors map to `primary: blue` / `neutral: gray` in `app/app.config.ts`. Prefer Nuxt UI semantic tokens (`text-muted`, `text-highlighted`, `bg-default`, `bg-muted`, `text-primary`, `border-default`) over raw `gray-*`/`blue-*` `dark:` pairs. Form controls use `USelect`/`UCheckbox`/`URadioGroup`/`UTextarea`/`UButton`; the settings panel uses `UPopover`.
+
 ### Components
 
-- `JsonHighlighter.vue` — Shiki-powered syntax highlighting for JSON output; toggles between highlighted view and editable textarea on click
-- `CopyButton.vue` — Uses VueUse `useClipboard`; positioned absolutely in parent container
-- `ColorModeToggle.vue` — Cycles system/light/dark using VueUse `useCycleList` and Nuxt `@nuxtjs/color-mode`
+- `JsonHighlighter.vue` — Shiki-powered syntax highlighting for JSON output; toggles between highlighted view and an editable `UTextarea` on click (focuses the element via the textarea's exposed `textareaRef`)
+- `CopyButton.vue` — `UButton` driven by VueUse `useClipboard`; positioned absolutely in parent container
+- `ColorModeToggle.vue` — `UButton` that cycles system/light/dark using VueUse `useCycleList`; color mode comes from Nuxt UI's bundled `@nuxtjs/color-mode`
 
 ### Key Patterns
 
-- VueUse composables used throughout: `useDebounceFn`, `onClickOutside`, `useFileDialog`, `useClipboard`, `useCycleList`
+- VueUse composables used throughout: `useDebounceFn`, `useFileDialog`, `useClipboard`, `useCycleList` (outside-click/dismiss is handled by `UPopover`, not `onClickOutside`)
 - `useAnalytics()` composable wraps `nuxt-gtag`'s `useTrackEvent` for event tracking
 - `experimental.clientNodeCompat: true` in Nuxt config enables Node.js `Buffer` in browser context (required by `cbor-x`)
+- Icons use Lucide (`i-lucide-*`) via `@nuxt/icon`. Because the static GitHub Pages host has no runtime icon API, `icon.clientBundle` in `nuxt.config.ts` keeps `scan: true` **and** lists Nuxt UI's internal component icons (select chevron, checkbox tick) explicitly — add any new icon there if it must survive the static build
 - i18n uses lazy-loaded locale files in `i18n/locales/` with `prefix_and_default` strategy
 
 ### Deployment
