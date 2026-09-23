@@ -15,25 +15,25 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@nuxt/ui": "^4.8.0",
-    "@nuxtjs/i18n": "10.4.0",
-    "@nuxtjs/sitemap": "7.4.1",
-    "@sentry/nuxt": "^9",
-    "@vueuse/core": "^14.2.1",
+    "@nuxt/ui": "^4.11.2",
+    "@nuxtjs/i18n": "10.6.0",
+    "@nuxtjs/sitemap": "8.5.1",
+    "@sentry/nuxt": "^10",
+    "@vueuse/core": "^14.4.0",
     "cbor-x": "^1.6.0",
-    "nuxt": "^4.0.0",
-    "nuxt-gtag": "^3.0.3",
+    "nuxt": "^4.5.2",
+    "nuxt-gtag": "^5.0.0",
     "shiki": "^3.13.0",
     "tailwindcss": "^4.3.0"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.109",
-    "@nuxt/eslint": "1.4.1",
+    "@nuxt/eslint": "1.17.0",
     "eslint": "^9.0.0",
     "typescript": "^5.8.3",
     "vitest": "^3.0.5",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^3.3.11"
   },
   "resolutions": {
     "@vercel/nft": "^0.27.4"

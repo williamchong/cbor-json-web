@@ -98,10 +98,8 @@ export default defineNuxtConfig({
   },
 
   sentry: {
-    sourceMapsUploadOptions: {
-      org: 'williamchong',
-      project: 'cbor-convertor',
-    },
+    org: 'williamchong',
+    project: 'cbor-convertor',
   },
 
   sourcemap: {
