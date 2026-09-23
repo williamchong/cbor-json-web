@@ -114,13 +114,12 @@
         <section>
           <h2 class="text-2xl font-semibold text-highlighted mb-4">{{ $t('sections.whatIsCbor.title') }}</h2>
           <div class="space-y-4 text-muted">
-            <p v-for="(text, index) in $tm('sections.whatIsCbor.content')" :key="index">
-              <i18n-t v-if="$rt(text).includes('{0}')" :keypath="'sections.whatIsCbor.content.' + index" tag="span">
+            <p v-for="(_, index) in $tm('sections.whatIsCbor.content')" :key="index">
+              <i18n-t :keypath="'sections.whatIsCbor.content.' + index" tag="span">
                 <a href="https://cbor.io/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                   {{ $t('sections.whatIsCbor.link') }}
                 </a>
               </i18n-t>
-              <template v-else>{{ $rt(text) }}</template>
             </p>
           </div>
         </section>
