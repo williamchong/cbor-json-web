@@ -19,6 +19,8 @@ export default defineNuxtConfig({
 
   i18n: {
     baseUrl: 'https://cbor.williamchong.cloud',
+    // GitHub Pages 301s `/zh` to `/zh/`, so emit slashed canonical/hreflang
+    trailingSlash: true,
     strategy: 'prefix_and_default',
     detectBrowserLanguage: {
       useCookie: false,
@@ -47,6 +49,12 @@ export default defineNuxtConfig({
   site: {
     url: 'https://cbor.williamchong.cloud',
     name: 'CBOR to JSON Online Converter',
+    trailingSlash: true,
+  },
+
+  sitemap: {
+    // `/en` duplicates the default-locale root and canonicalizes to `/`
+    exclude: ['/en', '/en/**'],
   },
 
   devtools: { enabled: true },
