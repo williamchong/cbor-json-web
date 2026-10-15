@@ -25,10 +25,29 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { codeToHtml } from 'shiki/bundle/web'
+import { createHighlighterCore, type HighlighterCore } from 'shiki/core'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
+// Only the JSON grammar and two themes: the full web bundle made every page
+// prefetch ~120 grammar chunks plus the Oniguruma WASM. Created lazily so SSR
+// never builds it; a failed chunk load (e.g. after a redeploy) is not cached.
+let highlighterPromise: Promise<HighlighterCore> | undefined
+function getHighlighter() {
+  highlighterPromise ??= createHighlighterCore({
+    themes: [import('shiki/themes/github-light.mjs'), import('shiki/themes/github-dark.mjs')],
+    langs: [import('shiki/langs/json.mjs')],
+    engine: createJavaScriptRegexEngine(),
+  }).catch((err) => {
+    highlighterPromise = undefined
+    throw err
+  })
+  return highlighterPromise
+}
+</script>
+
+<script setup lang="ts">
 const props = defineProps<{
   code: string
   placeholder: string
@@ -79,25 +98,22 @@ async function highlightCode(code: string) {
     return
   }
 
+  let lang = 'json'
   try {
     // Try to parse as JSON to validate
     JSON.parse(code)
-
-    const theme = colorMode.value === 'dark' ? 'github-dark' : 'github-light'
-    const html = await codeToHtml(code, {
-      lang: 'json',
-      theme
-    })
-    highlightedCode.value = html
   } catch (err) {
     console.error(err)
     // If it's not valid JSON, show as plain text with the same theme
-    const theme = colorMode.value === 'dark' ? 'github-dark' : 'github-light'
-    const html = await codeToHtml(code, {
-      lang: 'text',
-      theme
-    })
-    highlightedCode.value = html
+    lang = 'text'
+  }
+
+  const theme = colorMode.value === 'dark' ? 'github-dark' : 'github-light'
+  try {
+    const highlighter = await getHighlighter()
+    highlightedCode.value = highlighter.codeToHtml(code, { lang, theme })
+  } catch (err) {
+    console.error(err)
   }
 }
 
