@@ -1,6 +1,6 @@
 {
   "title": "CBOR 與 JSON 在線轉換工具",
-  "subtitle": "即時解碼與檢視 CBOR 資料 — 貼上即轉換",
+  "subtitle": "即時將 CBOR 解碼為 JSON，或將 JSON 編碼回 CBOR — 貼上即轉換",
   "cbor": {
     "label": "CBOR",
     "encoding": "編碼方式",
@@ -70,8 +70,8 @@
   },
   "layout": {
     "meta": {
-      "title": "CBOR 與 JSON 在線轉換工具",
-      "description": "線上即時轉換 CBOR 與 JSON，支援 base64/hex 編碼、BigInt、Buffer 與 Set。適用於 WebAuthn、IoT、COSE 等開發場景的除錯工具。"
+      "title": "CBOR 與 JSON 線上轉換・解碼工具（Hex/Base64）",
+      "description": "免費線上 CBOR 解碼器與 JSON 轉 CBOR 編碼器。貼上 hex 或 base64 即可解碼 WebAuthn、IoT、COSE 資料，支援 BigInt、Buffer 與 Set。"
     }
   },
   "components": {

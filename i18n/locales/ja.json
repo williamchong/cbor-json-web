@@ -1,6 +1,6 @@
 {
   "title": "CBOR と JSON オンライン変換ツール",
-  "subtitle": "CBORデータを即座にデコード・検査 — ペーストするだけ",
+  "subtitle": "CBORをJSONにデコード、JSONをCBORにエンコード — ペーストするだけ",
   "cbor": {
     "label": "CBOR",
     "encoding": "エンコーディング",
@@ -70,8 +70,8 @@
   },
   "layout": {
     "meta": {
-      "title": "CBOR と JSON オンライン変換ツール",
-      "description": "WebAuthn・IoT・COSEのデバッグに最適なCBOR⇔JSONオンライン変換ツール。base64/hexエンコーディング、BigInt、Buffer、Setに対応。"
+      "title": "CBOR⇔JSON オンライン変換・デコーダー（Hex/Base64対応）",
+      "description": "無料のオンラインCBORデコーダー＆JSON→CBORエンコーダー。hexまたはbase64を貼り付けるだけで、WebAuthn・IoT・COSEのデータをデコード。BigInt、Buffer、Setに対応。"
     }
   },
   "components": {

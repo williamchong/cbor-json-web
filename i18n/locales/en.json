@@ -1,6 +1,6 @@
 {
   "title": "CBOR to JSON Online Converter",
-  "subtitle": "Decode and inspect CBOR payloads as readable JSON — instantly",
+  "subtitle": "Decode CBOR to readable JSON, or encode JSON back to CBOR — instantly",
   "cbor": {
     "label": "CBOR",
     "encoding": "Encoding",
@@ -70,8 +70,8 @@
   },
   "layout": {
     "meta": {
-      "title": "CBOR to JSON Online Converter",
-      "description": "Online CBOR to JSON converter for debugging WebAuthn, IoT, and COSE payloads. Supports base64/hex encoding, BigInt, Buffer, and Set. Paste and convert instantly."
+      "title": "CBOR to JSON Converter & Decoder Online (Hex/Base64)",
+      "description": "Free online CBOR decoder and JSON to CBOR encoder. Paste hex or base64 to decode WebAuthn, IoT, and COSE payloads. Supports BigInt, Buffer, and Set."
     }
   },
   "components": {
