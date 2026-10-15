@@ -14,7 +14,12 @@ useSeoMeta({
   ogTitle: t('layout.meta.title'),
   ogDescription: t('layout.meta.description'),
   ogImage: 'https://cbor.williamchong.cloud/images/cover.png',
+  ogImageWidth: 1600,
+  ogImageHeight: 840,
+  ogImageAlt: t('layout.meta.title'),
+  ogSiteName: t('title'),
   ogType: 'website',
+  twitterCard: 'summary_large_image',
 })
 
 useHead(() => ({
