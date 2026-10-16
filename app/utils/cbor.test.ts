@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isBase64, isHex, cborToJsonString, jsonStringToCbor } from './cbor'
+import { isBase64, isHex, cborToJsonString, jsonStringToCbor, detectEncoding, normalizeCborInput, valueToJsonString } from './cbor'
 import { encode } from 'cbor-x'
 
 describe('CBOR Utils', () => {
@@ -15,6 +15,16 @@ describe('CBOR Utils', () => {
     it('should return false for empty string', () => {
       expect(isBase64('')).toBe(false)
     })
+
+    it('should accept base64url and missing padding', () => {
+      expect(isBase64('oWFhAQ')).toBe(true)
+      expect(isBase64('-_8')).toBe(true)
+    })
+
+    it('should reject lengths that cannot be base64', () => {
+      expect(isBase64('abcde')).toBe(false)
+      expect(isBase64('A=')).toBe(false)
+    })
   })
 
   describe('isHex', () => {
@@ -24,6 +34,43 @@ describe('CBOR Utils', () => {
 
     it('should return false for invalid hex strings', () => {
       expect(isHex('not-hex!')).toBe(false)
+    })
+
+    it('should return false for odd-length strings', () => {
+      expect(isHex('abc')).toBe(false)
+    })
+  })
+
+  describe('normalizeCborInput', () => {
+    it('should strip whitespace and newlines', () => {
+      expect(normalizeCborInput('a1 61\n61 01\n', 'hex')).toBe('a1616101')
+    })
+
+    it('should strip a 0x prefix from hex', () => {
+      expect(normalizeCborInput('0xA1616101', 'hex')).toBe('A1616101')
+    })
+
+    it('should keep a leading 0x in base64', () => {
+      expect(normalizeCborInput('0xabcd', 'base64')).toBe('0xabcd')
+    })
+  })
+
+  describe('detectEncoding', () => {
+    it('should prefer hex when input is valid as both', () => {
+      expect(detectEncoding('a1616101')).toBe('hex')
+    })
+
+    it('should detect hex with spaces and 0x prefix', () => {
+      expect(detectEncoding('0x a1 61 61 01')).toBe('hex')
+    })
+
+    it('should detect base64 including unpadded base64url', () => {
+      expect(detectEncoding('oWFhAQ==')).toBe('base64')
+      expect(detectEncoding('oWFhAQ')).toBe('base64')
+    })
+
+    it('should return undefined for neither', () => {
+      expect(detectEncoding('not cbor!')).toBeUndefined()
     })
   })
 
@@ -41,11 +88,30 @@ describe('CBOR Utils', () => {
     it('should handle complex objects', () => {
       const data = 'b9000466737472696e676568656c6c6f666e756d626572182a65617272617983010203666e6573746564b90001636b65796576616c7565'
       const result = cborToJsonString(data, 'hex')
-      expect(jsonStringToCbor(result, 'hex')).toBe(data)
+      expect(jsonStringToCbor(result, 'hex')).toBe('a466737472696e676568656c6c6f666e756d626572182a65617272617983010203666e6573746564a1636b65796576616c7565')
+    })
+
+    it('should decode hex containing whitespace in full', () => {
+      expect(cborToJsonString('a1 61 61\n01', 'hex')).toBe(JSON.stringify({ a: 1 }, null, 2))
+    })
+
+    it('should not silently decode a prefix of spaced hex', () => {
+      expect(() => cborToJsonString('01 02', 'hex')).toThrow()
+    })
+
+    it('should decode unpadded base64url', () => {
+      expect(cborToJsonString('oWFhAQ', 'base64')).toBe(JSON.stringify({ a: 1 }, null, 2))
+    })
+
+    it('should output only the bytes of a typed array view', () => {
+      const view = new Uint8Array([9, 9, 104, 105, 9]).subarray(2, 4)
+      expect(valueToJsonString(view, { bufferFormat: 'base64' })).toBe('"aGk="')
+      expect(valueToJsonString(view, { bufferFormat: 'hex' })).toBe('"6869"')
     })
 
     it('should return empty string for empty input', () => {
       expect(cborToJsonString('', 'base64')).toBe('')
+      expect(cborToJsonString(' \n', 'hex')).toBe('')
     })
 
     it('should handle buffer with different output formats', () => {
@@ -162,6 +228,16 @@ describe('CBOR Utils', () => {
 
     it('should return empty string for empty input', () => {
       expect(jsonStringToCbor('', 'base64')).toBe('')
+    })
+
+    it('should encode maps with the shortest header', () => {
+      expect(jsonStringToCbor('{"a":1}', 'hex')).toBe('a1616101')
+    })
+
+    it('should parse negative bigint literals back to BigInt', () => {
+      const result = jsonStringToCbor('{"n":"-12345678901234567890n"}', 'hex')
+      const parsed = JSON.parse(cborToJsonString(result, 'hex', { bigintFormat: 'literal' }))
+      expect(parsed.n).toBe('-12345678901234567890n')
     })
 
     it('should parse bigint literals back to BigInt', () => {

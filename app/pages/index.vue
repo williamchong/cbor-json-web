@@ -158,9 +158,8 @@
 
 <script setup lang="ts">
 import { useDebounceFn, useFileDialog } from '@vueuse/core'
-import { encode } from 'cbor-x'
 import { Buffer } from 'node:buffer'
-import { isBase64, isHex, cborToJsonString, jsonStringToCbor, type BufferOutputFormat, type BigintOutputFormat } from '~/utils/cbor'
+import { detectEncoding, cborToJsonString, encodeCbor, jsonStringToCbor, type BufferOutputFormat, type BigintOutputFormat } from '~/utils/cbor'
 
 const { t } = useI18n()
 
@@ -180,7 +179,7 @@ const jsonPlaceHolderString = computed(() => valueToJsonString(jsonPlaceHolder, 
   convertSetToArray: convertSetToArray.value,
   bigintFormat: bigintFormat.value
 }))
-const cborPlaceHolder = computed(() => Buffer.from(encode(jsonPlaceHolder)).toString(cborEncoding.value))
+const cborPlaceHolder = computed(() => Buffer.from(encodeCbor(jsonPlaceHolder)).toString(cborEncoding.value))
 const bufferFormat = ref<BufferOutputFormat>('none')
 const bigintFormat = ref<BigintOutputFormat>('string')
 const isJsonInput = ref(false)
@@ -272,11 +271,8 @@ function cborToJson() {
       jsonValue.value = ''
       return
     }
-    if (isBase64(cborValue.value) && !isHex(cborValue.value)) {
-      cborEncoding.value = 'base64'
-    } else if (!isBase64(cborValue.value) && isHex(cborValue.value)) {
-      cborEncoding.value = 'hex'
-    }
+    const detected = detectEncoding(cborValue.value)
+    if (detected) cborEncoding.value = detected
     jsonValue.value = cborToJsonString(cborValue.value, cborEncoding.value, {
       bufferFormat: bufferFormat.value,
       convertSetToArray: convertSetToArray.value,
