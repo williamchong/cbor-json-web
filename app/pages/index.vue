@@ -89,6 +89,7 @@
                           @update:model-value="onToggleBigintSettings"
                         />
                       </div>
+                      <p class="text-xs text-muted">{{ $t('settings.roundTripHint') }}</p>
                     </div>
                   </div>
                 </template>

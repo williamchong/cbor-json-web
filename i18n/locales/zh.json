@@ -28,7 +28,8 @@
       "label": "BigInt 格式",
       "string": "數字字串（'123'）",
       "literal": "字面常數字串（'123n'）"
-    }
+    },
+    "roundTripHint": "若要讓 JSON → CBOR 完整還原，請使用 BigInt 字面常數字串及二進位資料格式「無」。"
   },
 
   "errors": {
