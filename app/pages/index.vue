@@ -40,10 +40,12 @@
               :rows="12"
               class="w-full"
               :ui="{ base: 'min-h-[300px] resize-none' }"
+              :class="{ 'opacity-50': conversionError && isJsonInput }"
               @update:model-value="debouncedCborToJson"
             />
             <CopyButton :text="cborValue" />
           </div>
+          <UAlert v-if="conversionError && !isJsonInput" color="error" variant="subtle" :description="conversionError" class="mt-2" />
         </div>
         <div class="flex-1">
           <div class="flex justify-between items-center mb-2 mx-2">
@@ -98,8 +100,10 @@
             :code="jsonValue"
             :placeholder="jsonPlaceHolderString"
             :editable="true"
+            :class="{ 'opacity-50': conversionError && !isJsonInput }"
             @update:code="onJsonUpdate"
           />
+          <UAlert v-if="conversionError && isJsonInput" color="error" variant="subtle" :description="conversionError" class="mt-2" />
         </div>
       </section>
 
@@ -183,6 +187,8 @@ const cborPlaceHolder = computed(() => Buffer.from(encodeCbor(jsonPlaceHolder)).
 const bufferFormat = ref<BufferOutputFormat>('none')
 const bigintFormat = ref<BigintOutputFormat>('string')
 const isJsonInput = ref(false)
+// Shown under the pane being edited; the other pane keeps its last good output
+const conversionError = ref('')
 const convertSetToArray = ref(true)
 
 const encodingItems = computed(() => [
@@ -212,7 +218,8 @@ onFileChange(async (files) => {
     cborValue.value = buffer.toString(cborEncoding.value)
     cborToJson()
   } catch (e) {
-    jsonValue.value = (e as Error).message
+    isJsonInput.value = false
+    conversionError.value = (e as Error).message
   }
 })
 
@@ -266,6 +273,7 @@ function onToggleBigintSettings(value: BigintOutputFormat) {
 
 function cborToJson() {
   isJsonInput.value = false
+  conversionError.value = ''
   try {
     if (!cborValue.value) {
       jsonValue.value = ''
@@ -280,17 +288,18 @@ function cborToJson() {
     })
     trackEvent('convert_cbor_to_json')
   } catch (e) {
-    jsonValue.value = (e as Error).message
+    conversionError.value = t('errors.invalidCbor', { message: (e as Error).message })
   }
 }
 
 function jsonToCbor() {
   isJsonInput.value = true
+  conversionError.value = ''
   try {
     cborValue.value = jsonStringToCbor(jsonValue.value, cborEncoding.value)
     trackEvent('convert_json_to_cbor')
   } catch (e) {
-    cborValue.value = (e as Error).message
+    conversionError.value = t('errors.invalidJson', { message: (e as Error).message })
   }
 }
 

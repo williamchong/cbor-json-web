@@ -31,6 +31,11 @@
     }
   },
 
+  "errors": {
+    "invalidCbor": "無効なCBOR：{message}",
+    "invalidJson": "無効なJSON：{message}"
+  },
+
   "sections": {
     "whatIs": {
       "title": "このツールについて",

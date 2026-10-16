@@ -31,6 +31,11 @@
     }
   },
 
+  "errors": {
+    "invalidCbor": "無效的 CBOR：{message}",
+    "invalidJson": "無效的 JSON：{message}"
+  },
+
   "sections": {
     "whatIs": {
       "title": "這是什麼工具？",
