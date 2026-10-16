@@ -29,7 +29,7 @@
       "string": "String ('123')",
       "literal": "Literal String ('123n')"
     },
-    "roundTripHint": "For an exact JSON → CBOR round trip, use the Literal BigInt format and Buffer Format 'none'."
+    "roundTripHint": "To keep BigInts and byte strings when converting JSON back to CBOR, choose BigInt Format “{literal}” and Buffer Format “{none}”."
   },
 
   "errors": {
