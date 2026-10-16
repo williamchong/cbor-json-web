@@ -226,14 +226,6 @@ onFileChange(async (files) => {
 const debouncedCborToJson = useDebounceFn(() => cborToJson(), 200)
 const debouncedJsonToCbor = useDebounceFn(() => jsonToCbor(), 200)
 
-watch(cborEncoding, () => {
-  if (isJsonInput.value) {
-    jsonToCbor()
-  } else {
-    cborToJson()
-  }
-})
-
 watch(bufferFormat, () => {
   if (isJsonInput.value) return;
   cborToJson()
@@ -244,6 +236,13 @@ function onEncodingChange(value: BufferEncoding) {
   trackEvent('toggle_cbor_encoding', {
     encoding: value
   })
+  // Converting here rather than in a watcher keeps auto-detection in
+  // cborToJson from triggering a second conversion
+  if (isJsonInput.value) {
+    jsonToCbor()
+  } else {
+    cborToJson()
+  }
 }
 
 function onBufferFormatChange(value: BufferOutputFormat) {
